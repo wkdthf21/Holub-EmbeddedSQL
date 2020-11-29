@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="ab5f151f-ddd4-4fc2-ab1d-55c2cd1da416" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../.project" beforeDir="false" afterPath="$PROJECT_DIR$/../.project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/CSVExporter.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/CSVExporter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/CSVImporter.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/CSVImporter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Results.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Results.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Test$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Test$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Test$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Test$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Test$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Test$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Test$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Test$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Test$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Test$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Test$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Test$6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Test$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Test$7.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Undo.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$Undo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$UndoDelete.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$UndoDelete.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$UndoInsert.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$UndoInsert.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$UndoUpdate.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable$UndoUpdate.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/ConcreteTable.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Cursor.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Cursor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$ArithmeticExpression.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$ArithmeticExpression.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$AtomicExpression.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$AtomicExpression.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$BooleanValue.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$BooleanValue.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$Expression.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$Expression.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$IdValue.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$IdValue.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$LikeExpression.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$LikeExpression.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$LogicalExpression.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$LogicalExpression.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$MathOperator.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$MathOperator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$NotExpression.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$NotExpression.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$NullValue.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$NullValue.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$NumericValue.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$NumericValue.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$RelationalExpression.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$RelationalExpression.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$RelationalOperator.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$RelationalOperator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$StringValue.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$StringValue.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$TableMap.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$TableMap.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$Test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database$Value.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database$Value.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Database.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/JTableExporter$Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/JTableExporter$Test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/JTableExporter.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/JTableExporter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Selector$Adapter.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Selector$Adapter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Selector.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Selector.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Table$Exporter.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Table$Exporter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Table$Importer.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Table$Importer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/Table.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/Table.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/TableFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/TableFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/UnmodifiableTable.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/UnmodifiableTable.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/Console$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/Console$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/Console$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/Console$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/Console.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/Console.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCConnection$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCConnection$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCConnection$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCConnection$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCConnection$AutoCommitBehavior.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCConnection$AutoCommitBehavior.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCConnection.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCConnection.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCDriver.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCDriver.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCResultSet.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCResultSet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCResultSetMetaData.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCResultSetMetaData.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCStatement.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCStatement.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/JDBCTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/adapters/ConnectionAdapter.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/adapters/ConnectionAdapter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/adapters/ResultSetAdapter.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/adapters/ResultSetAdapter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/adapters/ResultSetMetaDataAdapter.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/adapters/ResultSetMetaDataAdapter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/adapters/StatementAdapter.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/database/jdbc/adapters/StatementAdapter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/text/BeginToken.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/text/BeginToken.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/text/ParseFailure.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/text/ParseFailure.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/text/RegexToken.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/text/RegexToken.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/text/Scanner$Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/text/Scanner$Test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/text/Scanner.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/text/Scanner.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/text/SimpleToken.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/text/SimpleToken.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/text/Token.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/text/Token.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/text/TokenSet.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/text/TokenSet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/text/WordToken.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/text/WordToken.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/tools/ArrayIterator.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/tools/ArrayIterator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/com/holub/tools/ThrowableContainer.class" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/com/holub/tools/ThrowableContainer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../people" beforeDir="false" afterPath="$PROJECT_DIR$/../people" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1kxwE253J9BO5M4obKu9KrbQ5TO" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ab5f151f-ddd4-4fc2-ab1d-55c2cd1da416" name="Default Changelist" comment="" />
+      <created>1606655434862</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1606655434862</updated>
+      <workItem from="1606655436022" duration="15000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1606655450054">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1606655450054" />
+  </component>
+</project>
