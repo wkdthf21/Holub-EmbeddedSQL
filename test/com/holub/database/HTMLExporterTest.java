@@ -69,10 +69,9 @@ class HTMLExporterTest {
 		}
 		System.out.println("people table data all deleted");
 	}
-	
+    
 
-
-    @DisplayName("html export가 성공하여 파일이 생성되었는지")
+    @DisplayName("ConcreteTable의 export 함수로 html export가 성공하여 파일이 생성되었는지")
     @Test
     void export_empty_table() throws IOException {
     	
@@ -90,7 +89,7 @@ class HTMLExporterTest {
     }
     
     
-    @DisplayName("export된 데이터 내용이 table에 있는 내용과 동일한지")
+    @DisplayName("ConcreteTable의 export 함수로 export된 데이터 내용이 table에 있는 내용과 동일한지")
     @Test
     void check_exported_content() throws IOException {
     	
@@ -113,28 +112,32 @@ class HTMLExporterTest {
     		read += (char)cur;
     	}
     	
-    	String tableHtml = "<html><body><table border=\"1\" width =\"500\" height=\"300\" align =\"center\" >" + 
-    				       "<tr align =\"center\"><p><td colspan = \"" + width + "\"> " + tableName +  " </td></p></tr>";
+    	StringBuilder sb = new StringBuilder();
+    	sb.append("<html><body><table border=\"1\" width =\"500\" height=\"300\" align =\"center\" >"); 
+    	sb.append("<tr align =\"center\"><p><td colspan = \"" + width + "\"> " + tableName +  " </td></p></tr>");
     	
-    	
-    	tableHtml += "<tr align = center>";
+    	sb.append("<tr align = center>");
     	for(String columnName : columnNames) {
-    		tableHtml += "<td>" + columnName + "</td>";
+			sb.append("<td>");
+			sb.append(columnName.toString());
+			sb.append("</td>");
     	}
-    	tableHtml += "</tr>";
+    	sb.append("</tr>");
     	
     	
     	for(Object[] row : dataArr) {
-    		tableHtml += "<tr align = center>";
+    		sb.append("<tr align = center>");
     		for(Object data : row) {
-    			tableHtml += "<td>" + data.toString() + "</td>";
+    			sb.append("<td>");
+    			sb.append(data.toString());
+    			sb.append("</td>");
     		}
-    		tableHtml += "</tr>";
+    		sb.append("</tr>");
     	}
     	
-    	tableHtml += "</table></body></html>";
+    	sb.append("</table></body></html>");
     	
-    	assertEquals(tableHtml, read);
+    	assertEquals(sb.toString(), read);
     	
     	in.close();
     }
