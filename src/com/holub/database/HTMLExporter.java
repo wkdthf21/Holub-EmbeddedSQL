@@ -32,7 +32,7 @@ import java.util.Iterator;
  * @see Table.Exporter
  */
 
-public class HTMLExporter implements Table.Exporter{
+public class HTMLExporter extends MarkUpExporter{
 	
 	private final Writer out;
 	private 	  int	 width;

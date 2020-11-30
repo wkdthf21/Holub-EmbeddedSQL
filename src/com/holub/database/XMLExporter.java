@@ -50,7 +50,7 @@ import java.util.Iterator;
  * @see Table.Exporter
  * @see XMLImporter
  */
-public class XMLExporter implements Table.Exporter{
+public class XMLExporter extends MarkUpExporter{
 
 	
 	private final Writer out;
