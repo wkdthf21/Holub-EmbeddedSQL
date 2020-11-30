@@ -49,12 +49,10 @@ public class HTMLExporter implements Table.Exporter{
 	* @Desc : set width to column-size and save table name, column names into HTML file
 	*/
 	public void storeMetadata(String tableName, int width, int height, Iterator columnNames) throws IOException {
+		
 		this.width = width;
 		this.height = height;
-		
-		out.write("<html>");
-		out.write("<body>");
-		out.write("<table border=\"1\" width =\"500\" height=\"300\" align =\"center\" >");
+		tableName = tableName == null ? "<anonymous>" : tableName;
 		out.write("<tr align =\"center\"><p><td colspan = \"" + width + "\"> " +  tableName + " </td></p></tr>");
 		storeRow( columnNames );
 	}
@@ -67,13 +65,18 @@ public class HTMLExporter implements Table.Exporter{
 	* @Desc : make row using iterator
 	*/
 	public void storeRow(Iterator row) throws IOException {
-		out.write("<tr align = center>");
+		StringBuilder sb = new StringBuilder();
+		sb.append("<tr align = center>");
 		while( row.hasNext()){	
 			Object data = row.next();
-			if( data != null )	
-				out.write( "<td>" + data.toString() + "</td>");
+			if( data != null ) {
+				sb.append("<td>");
+				sb.append(data.toString());
+				sb.append("</td>");
+			}
 		}
-		out.write("</tr>");
+		sb.append("</tr>");
+		out.write(sb.toString());
 	}
 	
 	
@@ -84,12 +87,17 @@ public class HTMLExporter implements Table.Exporter{
 	* @Desc : make HTML closing tag
 	*/
 	public void endTable()   throws IOException {
-		out.write("</table>");
-		out.write("</body>");
-		out.write("</html>");
+		out.write("</table></body></html>");
 	}
 	
-	
-	public void startTable() throws IOException {/*nothing to do*/}
+	/**
+	* @methodName : startTable
+	* @Author : wkdthf21
+	* @return : 
+	* @Desc : make HTML opening tag
+	*/
+	public void startTable() throws IOException {
+		out.write("<html><body><table border=\"1\" width =\"500\" height=\"300\" align =\"center\" >");
+	}
 	
 }
