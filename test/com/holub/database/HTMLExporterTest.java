@@ -12,12 +12,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Iterator;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import com.holub.tools.ArrayIterator;
 
 /**
  * @author wkdthf21
@@ -70,6 +73,180 @@ class HTMLExporterTest {
 		}
 		System.out.println("people table data all deleted");
 	}
+	
+	
+    @DisplayName("HTMLExporter 함수 Test : startTable()")
+    @Test
+    void test_start_table() throws IOException {
+    	// given
+    	Writer out = new FileWriter(path);
+    	HTMLExporter htmlExporter = new HTMLExporter(out);
+    	
+    	// when
+    	htmlExporter.startTable();
+    	out.close();
+    	
+    	// then
+    	Reader in = new FileReader(path);
+    	BufferedReader bufReader = new BufferedReader(in);
+    	String line = "";
+    	StringBuilder readHtml = new StringBuilder();
+    	while((line = bufReader.readLine()) != null) {
+    		readHtml.append(line);
+    	}
+    	
+    	bufReader.close();
+    	
+    	assertEquals(readHtml.toString(), "<html><body><table border=\"1\" width =\"500\" height=\"300\" align =\"center\" >");
+    	
+    }
+    
+    
+    @DisplayName("HTMLExporter 함수 Test : storeMetadata()")
+    @Test
+    void test_store_meta_data() throws IOException {
+    	// given
+    	Writer out = new FileWriter(path);
+    	HTMLExporter htmlExporter = new HTMLExporter(out);
+    	
+    	// when
+    	String tableName = "people";
+    	int width = 0; 
+    	int height = 0;
+    	htmlExporter.storeMetadata(tableName, width, height, new ArrayIterator(columnNames));
+    	out.close();
+    	
+    	// then
+    	Reader in = new FileReader(path);
+    	BufferedReader bufReader = new BufferedReader(in);
+    	String line = "";
+    	StringBuilder readHtml = new StringBuilder();
+    	while((line = bufReader.readLine()) != null) {
+    		readHtml.append(line);
+    	}
+    	
+    	bufReader.close();
+    	
+    	StringBuilder answerHtml = new StringBuilder();
+    	answerHtml.append("<tr align =\"center\"><p><td colspan = \"" + width + "\"> " + tableName +  " </td></p></tr>");
+    	
+    	answerHtml.append("<tr align = center>");
+    	for(String columnName : columnNames) {
+    		answerHtml.append("<td>");
+    		answerHtml.append(columnName.toString());
+    		answerHtml.append("</td>");
+    	}
+    	answerHtml.append("</tr>");
+    	
+    	assertEquals(readHtml.toString(), answerHtml.toString());
+    	
+    }
+
+	
+    @DisplayName("HTMLExporter 함수 Test : tableName이 비어있는 경우 테이블 명이 <anonymous> 인지")
+    @Test
+    void test_store_meath_data_with_empty_tablename() throws IOException {
+    	// given
+    	Writer out = new FileWriter(path);
+    	HTMLExporter htmlExporter = new HTMLExporter(out);
+    	
+    	// when
+    	String tableName = null;
+    	int width = 0; 
+    	int height = 0;
+    	htmlExporter.storeMetadata(tableName, width, height, new ArrayIterator(columnNames));
+    	out.close();
+    	
+    	// then
+    	Reader in = new FileReader(path);
+    	BufferedReader bufReader = new BufferedReader(in);
+    	String line = "";
+    	StringBuilder readHtml = new StringBuilder();
+    	while((line = bufReader.readLine()) != null) {
+    		readHtml.append(line);
+    	}
+    	
+    	bufReader.close();
+    	
+    	StringBuilder answerHtml = new StringBuilder();
+    	answerHtml.append("<tr align =\"center\"><p><td colspan = \"" + width + "\"> " + "<anonymous>" +  " </td></p></tr>");
+    	
+    	answerHtml.append("<tr align = center>");
+    	for(String columnName : columnNames) {
+    		answerHtml.append("<td>");
+    		answerHtml.append(columnName.toString());
+    		answerHtml.append("</td>");
+    	}
+    	answerHtml.append("</tr>");
+    	
+    	assertEquals(readHtml.toString(), answerHtml.toString());
+    }
+    
+    
+    @DisplayName("HTMLExporter 함수 Test : storeRow()")
+    @Test
+    void test_store_row() throws IOException {
+    	// given
+    	Writer out = new FileWriter(path);
+    	HTMLExporter htmlExporter = new HTMLExporter(out);
+    	
+    	// when
+    	for(Object[] row : dataArr) {
+    		htmlExporter.storeRow(new ArrayIterator(row));
+    	}
+    	
+    	out.close();
+    	
+    	// then
+    	Reader in = new FileReader(path);
+    	BufferedReader bufReader = new BufferedReader(in);
+    	String line = "";
+    	StringBuilder readHtml = new StringBuilder();
+    	while((line = bufReader.readLine()) != null) {
+    		readHtml.append(line);
+    	}
+    	
+    	bufReader.close();
+    	
+    	StringBuilder answerHtml = new StringBuilder();
+    	for(Object[] row : dataArr) {
+    		answerHtml.append("<tr align = center>");
+    		for(Object data : row) {
+    			answerHtml.append("<td>");
+    			answerHtml.append(data.toString());
+    			answerHtml.append("</td>");
+    		}
+    		answerHtml.append("</tr>");
+    	}
+    	
+    	assertEquals(answerHtml.toString(), readHtml.toString());
+    }
+    
+    @DisplayName("HTMLExporter 함수 Test : endTable()")
+    @Test
+    void test_end_table() throws IOException {
+    	// given
+    	Writer out = new FileWriter(path);
+    	HTMLExporter htmlExporter = new HTMLExporter(out);
+    	
+    	// when
+    	htmlExporter.endTable();
+    	out.close();
+    	
+    	// then
+    	Reader in = new FileReader(path);
+    	BufferedReader bufReader = new BufferedReader(in);
+    	String line = "";
+    	StringBuilder readHtml = new StringBuilder();
+    	while((line = bufReader.readLine()) != null) {
+    		readHtml.append(line);
+    	}
+    	
+    	bufReader.close();
+    	
+    	assertEquals(readHtml.toString(), "</table></body></html>");
+    	
+    }
     
 
     @DisplayName("ConcreteTable의 export 함수로 html export가 성공하여 파일이 생성되었는지")
