@@ -5,6 +5,7 @@ package com.holub.database;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -106,38 +107,39 @@ class HTMLExporterTest {
     	int width = dataArr.length;
     	String tableName = "people";
     	Reader in = new FileReader(path);
-    	int cur = 0;
-    	String read = "";
-    	while((cur = in.read()) != -1) {
-    		read += (char)cur;
+    	BufferedReader bufReader = new BufferedReader(in);
+    	String line = "";
+    	StringBuilder readHtml = new StringBuilder();
+    	while((line = bufReader.readLine()) != null) {
+    		readHtml.append(line);
     	}
     	
-    	StringBuilder sb = new StringBuilder();
-    	sb.append("<html><body><table border=\"1\" width =\"500\" height=\"300\" align =\"center\" >"); 
-    	sb.append("<tr align =\"center\"><p><td colspan = \"" + width + "\"> " + tableName +  " </td></p></tr>");
+    	StringBuilder answerHtml = new StringBuilder();
+    	answerHtml.append("<html><body><table border=\"1\" width =\"500\" height=\"300\" align =\"center\" >"); 
+    	answerHtml.append("<tr align =\"center\"><p><td colspan = \"" + width + "\"> " + tableName +  " </td></p></tr>");
     	
-    	sb.append("<tr align = center>");
+    	answerHtml.append("<tr align = center>");
     	for(String columnName : columnNames) {
-			sb.append("<td>");
-			sb.append(columnName.toString());
-			sb.append("</td>");
+    		answerHtml.append("<td>");
+    		answerHtml.append(columnName.toString());
+    		answerHtml.append("</td>");
     	}
-    	sb.append("</tr>");
+    	answerHtml.append("</tr>");
     	
     	
     	for(Object[] row : dataArr) {
-    		sb.append("<tr align = center>");
+    		answerHtml.append("<tr align = center>");
     		for(Object data : row) {
-    			sb.append("<td>");
-    			sb.append(data.toString());
-    			sb.append("</td>");
+    			answerHtml.append("<td>");
+    			answerHtml.append(data.toString());
+    			answerHtml.append("</td>");
     		}
-    		sb.append("</tr>");
+    		answerHtml.append("</tr>");
     	}
     	
-    	sb.append("</table></body></html>");
+    	answerHtml.append("</table></body></html>");
     	
-    	assertEquals(sb.toString(), read);
+    	assertEquals(answerHtml.toString(), readHtml.toString());
     	
     	in.close();
     }
