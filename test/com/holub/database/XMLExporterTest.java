@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.LinkedList;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -60,7 +61,10 @@ class XMLExporterTest {
 	
 	private static final File path = new File("c:/dp2020/orders.xml");
 	private static Table orders;
+	private static String tableName = "orders";
 	private static String[] columnNames = { "item", "quantity", "date" };
+	
+	private LinkedList<Object[]> rowSet = new LinkedList<>();
 	private Object[][] dataArr = {
 			new Object[] { "E16-25A", "16", "2020/9/1" },
 			new Object[] { "E16-25B", "20", "2020/11/17" }
@@ -78,14 +82,14 @@ class XMLExporterTest {
 	
 	@BeforeAll
 	static void create_test_table() throws IOException {
-		orders = TableFactory.create("orders", columnNames);
-		System.out.println("Orders Table is created");
+		orders = TableFactory.create(tableName, columnNames);
+		System.out.println(tableName + " table is created");
 	}
 	
 	@AfterAll
-	static void delete_html_file() {
+	static void delete_xml_file() {
 		if(path.exists()) {
-			//path.delete();
+			path.delete();
 			System.out.println(path + " is deleted");
 		}
 	}
@@ -96,7 +100,7 @@ class XMLExporterTest {
 		while (current.advance()) {
 			current.delete();
 		}
-		System.out.println("Orders table data all deleted");
+		System.out.println(tableName + " table data all deleted");
 	}
 	
 	@DisplayName("XMLExporter 함수 Test : startTable()")
@@ -123,15 +127,11 @@ class XMLExporterTest {
 		XMLExporter xmlExporter = new XMLExporter(out);
 		
     	// when
-    	String tableName = "orders";
-    	int width = 0; 
-    	int height = 0;
-    	xmlExporter.storeMetadata(tableName, width, height, new ArrayIterator(columnNames));
+    	xmlExporter.storeMetadata(tableName, columnNames.length, 0, new ArrayIterator(columnNames));
     	out.close();
     	
     	// then
     	StringBuilder readXML = readFile();
-    	
     	StringBuilder answerXML = new StringBuilder();
     	answerXML.append(String.format("<metadata><tableName>%s</tableName><columnName>", tableName));
     	for(String columnName : columnNames) {
@@ -151,10 +151,8 @@ class XMLExporterTest {
 		XMLExporter xmlExporter = new XMLExporter(out);
 		
     	// when
-    	String tableName = null;
-    	int width = 0; 
-    	int height = 0;
-    	xmlExporter.storeMetadata(tableName, width, height, new ArrayIterator(columnNames));
+    	String tableNameNull = null;
+    	xmlExporter.storeMetadata(tableNameNull, columnNames.length, 0, new ArrayIterator(columnNames));
     	out.close();
     	
     	// then
@@ -247,7 +245,7 @@ class XMLExporterTest {
     	StringBuilder answerXML = new StringBuilder();
     	
     	answerXML.append("<?xml version=\"1.0\" encoding=\"EUC-KR\"?><table>");
-    	answerXML.append(String.format("<metadata><tableName>%s</tableName><columnName>", "orders"));
+    	answerXML.append(String.format("<metadata><tableName>%s</tableName><columnName>", tableName));
     	for(String columnName : columnNames) {
     		answerXML.append(String.format("<item>%s</item>", columnName.toString()));
     	}
@@ -262,6 +260,44 @@ class XMLExporterTest {
     	answerXML.append("</data></table>");
     	
     	assertEquals(readXML.toString(), answerXML.toString());
+    }
+    
+    
+    @DisplayName("Template Method Pattern 작동 확인")
+    @Test
+    void test_template_method() throws IOException {
+    	
+    	// given
+    	Writer out = new FileWriter(path);
+    	
+    	for(Object[] data : dataArr) rowSet.add(data);
+    	
+    	// when
+    	XMLExporter xmlExporter = new XMLExporter(out);
+    	xmlExporter.callExportProcess(tableName, columnNames.length, rowSet.size(), new ArrayIterator(columnNames), rowSet);
+    	out.close();
+    	
+    	// then
+    	StringBuilder readXML = readFile();
+    	StringBuilder answerXML = new StringBuilder();
+    	
+    	answerXML.append("<?xml version=\"1.0\" encoding=\"EUC-KR\"?><table>");
+    	answerXML.append(String.format("<metadata><tableName>%s</tableName><columnName>", tableName));
+    	for(String columnName : columnNames) {
+    		answerXML.append(String.format("<item>%s</item>", columnName.toString()));
+    	}
+    	answerXML.append("</columnName></metadata><data>");
+    	for(Object[] row : dataArr) {
+    		answerXML.append("<row>");
+    		for(Object data : row) {
+    			answerXML.append(String.format("<item>%s</item>", data.toString()));
+    		}
+    		answerXML.append("</row>");
+    	}
+    	answerXML.append("</data></table>");
+    	
+    	assertEquals(readXML.toString(), answerXML.toString());
+    	
     }
 }
 

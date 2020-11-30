@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -44,17 +45,33 @@ class HTMLExporterTest {
 	
 	private static final File path = new File("c:/dp2020/people.html");
 	private static Table people;
+	private static String tableName = "people";
 	private static String[] columnNames = { "last", "first", "addrId" };
+	
+	
+	private LinkedList<Object[]> rowSet = new LinkedList<>();
 	private Object[][] dataArr = {
 			new Object[] { "Fred", "Flintstone", "1" },
 			new Object[] { "Wilma", "Flintstone", "2" },
 			new Object[] { "Allen", "Holub", "0" }
 	};
 	
+	
+	private StringBuilder readFile() throws IOException {
+		Reader in = new FileReader(path);
+    	BufferedReader bufReader = new BufferedReader(in);
+    	String line = "";
+    	StringBuilder readHTML = new StringBuilder();
+    	while((line = bufReader.readLine()) != null) readHTML.append(line);
+    	bufReader.close();
+    	return readHTML;
+	}
+	
+	
 	@BeforeAll
 	static void create_people_table() throws IOException {
-		people = TableFactory.create("people", columnNames);
-		System.out.println("people table is created");
+		people = TableFactory.create(tableName, columnNames);
+		System.out.println(tableName + " table is created");
 	}
 	
 	@AfterAll
@@ -71,7 +88,7 @@ class HTMLExporterTest {
 		while (current.advance()) {
 			current.delete();
 		}
-		System.out.println("people table data all deleted");
+		System.out.println(tableName + " table data all deleted");
 	}
 	
 	
@@ -87,16 +104,7 @@ class HTMLExporterTest {
     	out.close();
     	
     	// then
-    	Reader in = new FileReader(path);
-    	BufferedReader bufReader = new BufferedReader(in);
-    	String line = "";
-    	StringBuilder readHtml = new StringBuilder();
-    	while((line = bufReader.readLine()) != null) {
-    		readHtml.append(line);
-    	}
-    	
-    	bufReader.close();
-    	
+    	StringBuilder readHtml = readFile();
     	assertEquals(readHtml.toString(), "<html><body><table border=\"1\" width =\"500\" height=\"300\" align =\"center\" >");
     	
     }
@@ -110,26 +118,14 @@ class HTMLExporterTest {
     	HTMLExporter htmlExporter = new HTMLExporter(out);
     	
     	// when
-    	String tableName = "people";
-    	int width = 0; 
-    	int height = 0;
-    	htmlExporter.storeMetadata(tableName, width, height, new ArrayIterator(columnNames));
+    	htmlExporter.storeMetadata(tableName, columnNames.length, 0, new ArrayIterator(columnNames));
     	out.close();
     	
     	// then
-    	Reader in = new FileReader(path);
-    	BufferedReader bufReader = new BufferedReader(in);
-    	String line = "";
-    	StringBuilder readHtml = new StringBuilder();
-    	while((line = bufReader.readLine()) != null) {
-    		readHtml.append(line);
-    	}
-    	
-    	bufReader.close();
-    	
+    	StringBuilder readHtml = readFile();
     	StringBuilder answerHtml = new StringBuilder();
-    	answerHtml.append("<tr align =\"center\"><p><td colspan = \"" + width + "\"> " + tableName +  " </td></p></tr>");
     	
+    	answerHtml.append(String.format("<tr align =\"center\"><p><td colspan = \"%s\"> %s </td></p></tr>", columnNames.length, tableName));
     	answerHtml.append("<tr align = center>");
     	for(String columnName : columnNames) {
     		answerHtml.append("<td>");
@@ -151,31 +147,17 @@ class HTMLExporterTest {
     	HTMLExporter htmlExporter = new HTMLExporter(out);
     	
     	// when
-    	String tableName = null;
-    	int width = 0; 
-    	int height = 0;
-    	htmlExporter.storeMetadata(tableName, width, height, new ArrayIterator(columnNames));
+    	String tableNameNull = null;
+    	htmlExporter.storeMetadata(tableNameNull, columnNames.length, 0, new ArrayIterator(columnNames));
     	out.close();
     	
     	// then
-    	Reader in = new FileReader(path);
-    	BufferedReader bufReader = new BufferedReader(in);
-    	String line = "";
-    	StringBuilder readHtml = new StringBuilder();
-    	while((line = bufReader.readLine()) != null) {
-    		readHtml.append(line);
-    	}
-    	
-    	bufReader.close();
-    	
+    	StringBuilder readHtml = readFile();
     	StringBuilder answerHtml = new StringBuilder();
-    	answerHtml.append("<tr align =\"center\"><p><td colspan = \"" + width + "\"> " + "<anonymous>" +  " </td></p></tr>");
-    	
+    	answerHtml.append(String.format("<tr align =\"center\"><p><td colspan = \"%s\"> <anonymous> </td></p></tr>", columnNames.length));
     	answerHtml.append("<tr align = center>");
     	for(String columnName : columnNames) {
-    		answerHtml.append("<td>");
-    		answerHtml.append(columnName.toString());
-    		answerHtml.append("</td>");
+    		answerHtml.append(String.format("<td>%s</td>", columnName.toString()));
     	}
     	answerHtml.append("</tr>");
     	
@@ -198,23 +180,12 @@ class HTMLExporterTest {
     	out.close();
     	
     	// then
-    	Reader in = new FileReader(path);
-    	BufferedReader bufReader = new BufferedReader(in);
-    	String line = "";
-    	StringBuilder readHtml = new StringBuilder();
-    	while((line = bufReader.readLine()) != null) {
-    		readHtml.append(line);
-    	}
-    	
-    	bufReader.close();
-    	
+    	StringBuilder readHtml = readFile();
     	StringBuilder answerHtml = new StringBuilder();
     	for(Object[] row : dataArr) {
     		answerHtml.append("<tr align = center>");
     		for(Object data : row) {
-    			answerHtml.append("<td>");
-    			answerHtml.append(data.toString());
-    			answerHtml.append("</td>");
+    			answerHtml.append(String.format("<td>%s</td>", data.toString()));
     		}
     		answerHtml.append("</tr>");
     	}
@@ -234,16 +205,7 @@ class HTMLExporterTest {
     	out.close();
     	
     	// then
-    	Reader in = new FileReader(path);
-    	BufferedReader bufReader = new BufferedReader(in);
-    	String line = "";
-    	StringBuilder readHtml = new StringBuilder();
-    	while((line = bufReader.readLine()) != null) {
-    		readHtml.append(line);
-    	}
-    	
-    	bufReader.close();
-    	
+    	StringBuilder readHtml = readFile();
     	assertEquals(readHtml.toString(), "</table></body></html>");
     	
     }
@@ -281,25 +243,14 @@ class HTMLExporterTest {
     	out.close();
     	
     	// then
-    	int width = dataArr.length;
-    	String tableName = "people";
-    	Reader in = new FileReader(path);
-    	BufferedReader bufReader = new BufferedReader(in);
-    	String line = "";
-    	StringBuilder readHtml = new StringBuilder();
-    	while((line = bufReader.readLine()) != null) {
-    		readHtml.append(line);
-    	}
-    	
+    	StringBuilder readHtml = readFile();
     	StringBuilder answerHtml = new StringBuilder();
     	answerHtml.append("<html><body><table border=\"1\" width =\"500\" height=\"300\" align =\"center\" >"); 
-    	answerHtml.append("<tr align =\"center\"><p><td colspan = \"" + width + "\"> " + tableName +  " </td></p></tr>");
+    	answerHtml.append(String.format("<tr align =\"center\"><p><td colspan = \"%s\"> %s </td></p></tr>", columnNames.length, tableName));
     	
     	answerHtml.append("<tr align = center>");
     	for(String columnName : columnNames) {
-    		answerHtml.append("<td>");
-    		answerHtml.append(columnName.toString());
-    		answerHtml.append("</td>");
+    		answerHtml.append(String.format("<td>%s</td>", columnName.toString()));
     	}
     	answerHtml.append("</tr>");
     	
@@ -307,18 +258,55 @@ class HTMLExporterTest {
     	for(Object[] row : dataArr) {
     		answerHtml.append("<tr align = center>");
     		for(Object data : row) {
-    			answerHtml.append("<td>");
-    			answerHtml.append(data.toString());
-    			answerHtml.append("</td>");
+    			answerHtml.append(String.format("<td>%s</td>", data.toString()));
+    		}
+    		answerHtml.append("</tr>");
+    	}
+    	answerHtml.append("</table></body></html>");
+    	
+    	assertEquals(answerHtml.toString(), readHtml.toString());
+    	
+    }
+    
+    
+    @DisplayName("Template Method Pattern 작동 확인")
+    @Test
+    void test_template_method() throws IOException {
+    	
+    	// given
+    	Writer out = new FileWriter(path);
+    	
+    	for(Object[] data : dataArr) rowSet.add(data);
+    	
+    	// when
+    	HTMLExporter htmlExporter = new HTMLExporter(out);
+    	htmlExporter.callExportProcess(tableName, columnNames.length, rowSet.size(), new ArrayIterator(columnNames), rowSet);
+    	out.close();
+    	
+    	// then
+    	StringBuilder readHTML = readFile();
+    	StringBuilder answerHtml = new StringBuilder();
+    	answerHtml.append("<html><body><table border=\"1\" width =\"500\" height=\"300\" align =\"center\" >"); 
+    	answerHtml.append(String.format("<tr align =\"center\"><p><td colspan = \"%s\"> %s </td></p></tr>", columnNames.length, tableName));
+    	
+    	answerHtml.append("<tr align = center>");
+    	for(String columnName : columnNames) {
+    		answerHtml.append(String.format("<td>%s</td>", columnName.toString()));
+    	}
+    	answerHtml.append("</tr>");
+    	
+    	
+    	for(Object[] row : dataArr) {
+    		answerHtml.append("<tr align = center>");
+    		for(Object data : row) {
+    			answerHtml.append(String.format("<td>%s</td>", data.toString()));
     		}
     		answerHtml.append("</tr>");
     	}
     	
     	answerHtml.append("</table></body></html>");
     	
-    	assertEquals(answerHtml.toString(), readHtml.toString());
-    	
-    	in.close();
+    	assertEquals(answerHtml.toString(), readHTML.toString());
     }
 
 }
