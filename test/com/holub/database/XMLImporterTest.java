@@ -14,6 +14,39 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
+/**
+ * @author yesol
+ *
+ * Test importing table from xml file
+ * [! Move all files in Dbase folder to C:/dp2020 folder before testing]
+ * 
+ * xml file example :
+ * <?xml version="1.0" encoding="EUC-KR"?>
+	<table>
+	<metadata>
+		<tableName>orders</tableName>
+		<columnName>
+			<item>item</item>
+			<item>quantity</item>
+			<item>date</item>
+		</columnName>
+	</metadata>	
+	<data>
+	        <row>
+	                <item>E16-25A</item>
+	                <item>16</item>
+	                <item>2020/9/1</item>
+	        </row>
+	        <row>
+	                <item>E16-25B</item>
+	                <item>20</item>
+	                <item>2020/11/17</item>
+	        </row>
+	</data>
+	</table>
+	
+ *
+ */
 class XMLImporterTest {
 
 	private static Reader in;
