@@ -48,6 +48,7 @@ import java.util.Iterator;
  *	The data contains rows and each row contains item in column order
  * @see Table
  * @see Table.Exporter
+ * @see MarkUpExporter
  * @see XMLImporter
  */
 public class XMLExporter extends MarkUpExporter{
@@ -57,56 +58,67 @@ public class XMLExporter extends MarkUpExporter{
 	private 	  int	 width;
 	private 	  int	 height;
 	
+	private static final String META_XML = "<metadata><tableName>%s</tableName>%s</metadata>";
+	private static final String ITEM_XML = "<item>%s</item>";
+	private static final String ROW_XML = "<%s>%s</%s>";
+	
 	public XMLExporter(Writer out) {
 		this.out = out;
 	}
-	
-	public void startTable() throws IOException {
-		out.write("<?xml version=\"1.0\" encoding=\"EUC-KR\"?>");
-		out.write("<table>");
+
+	@Override
+	public void makeStart() throws IOException {
+		// TODO Auto-generated method stub
+		out.write("<?xml version=\"1.0\" encoding=\"EUC-KR\"?><table>");
 	}
 
-	
-	public void storeMetadata(String tableName, int width, int height, Iterator columnNames) throws IOException {
+	@Override
+	public void makeEnd() throws IOException {
+		// TODO Auto-generated method stub
+		out.write("</table>");
+	}
+
+	@Override
+	public void makeMetadata(String tableName, int width, int height, Iterator columnNames) throws IOException {
+		// TODO Auto-generated method stub
 		this.width = width;
 		this.height = height;
 		tableName = tableName == null ? "<anonymous>" : tableName;
-		
-		out.write(String.format("<metadata><tableName>%s</tableName>", tableName));
-		storeColumnName(columnNames);
-		out.write("</metadata><data>");
+		out.write(String.format(META_XML, tableName, makeRowWithTag("columnName", columnNames)));
 	}
 
-	public void storeRow(Iterator row) throws IOException {
-		StringBuilder sb = new StringBuilder();
-		sb.append("<row>");
-		while(row.hasNext()){	
-			Object item = row.next();
-			if( item != null ) {
-				sb.append(String.format("<item>%s</item>", item.toString()));
-			}
-		}
-		sb.append("</row>");
-		out.write(sb.toString());
+	@Override
+	public void makeDataStart() throws IOException {
+		// TODO Auto-generated method stub
+		out.write("<data>");
 	}
 
-	
-	public void endTable() throws IOException {
-		out.write("</data></table>");
+	@Override
+	public void makeDataEnd() throws IOException {
+		// TODO Auto-generated method stub
+		out.write("</data>");
+	}
+
+	@Override
+	public void makeRow(Iterator row) throws IOException {
+		// TODO Auto-generated method stub
+		out.write(makeRowWithTag("row", row));
 	}
 	
-	
-	private void storeColumnName(Iterator row) throws IOException {
+	/**
+	* @methodName : makeRowWithTag
+	* @Author : wkdthf21
+	* @return : 
+	* @Desc : make data row to xml structure (<tag><item>%s</item><item>%s</item>...</tag>)
+	* 		  tag is string parameter
+	*/
+	private String makeRowWithTag(String tag, Iterator row) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<columnName>");
 		while(row.hasNext()){	
 			Object item = row.next();
-			if( item != null ) {
-				sb.append(String.format("<item>%s</item>", item.toString()));
-			}
+			if( item != null ) sb.append(String.format(ITEM_XML, item.toString()));
 		}
-		sb.append("</columnName>");
-		out.write(sb.toString());
+		return String.format(ROW_XML, tag, sb.toString(), tag);
 	}
 
 }
