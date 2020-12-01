@@ -125,17 +125,13 @@ class HTMLExporterTest {
     	StringBuilder readHtml = readFile();
     	StringBuilder answerHtml = new StringBuilder();
     	
-    	answerHtml.append(String.format("<tr align =\"center\"><p><td colspan = \"%s\"> %s </td></p></tr>", columnNames.length, tableName));
+    	answerHtml.append(String.format("<thead><tr align =\"center\" height = \"50\"><p><td colspan = \"%s\"> %s </td></p></tr>", columnNames.length, tableName));
     	answerHtml.append("<tr align = center>");
     	for(String columnName : columnNames) {
-    		answerHtml.append("<td>");
-    		answerHtml.append(columnName.toString());
-    		answerHtml.append("</td>");
+    		answerHtml.append(String.format("<td>%s</td>", columnName.toString()));
     	}
-    	answerHtml.append("</tr>");
-    	
+    	answerHtml.append("</tr></thead>");
     	assertEquals(readHtml.toString(), answerHtml.toString());
-    	
     }
 
 	
@@ -154,12 +150,12 @@ class HTMLExporterTest {
     	// then
     	StringBuilder readHtml = readFile();
     	StringBuilder answerHtml = new StringBuilder();
-    	answerHtml.append(String.format("<tr align =\"center\"><p><td colspan = \"%s\"> <anonymous> </td></p></tr>", columnNames.length));
+    	answerHtml.append(String.format("<thead><tr align =\"center\" height = \"50\"><p><td colspan = \"%s\"> <anonymous> </td></p></tr>", columnNames.length));
     	answerHtml.append("<tr align = center>");
     	for(String columnName : columnNames) {
     		answerHtml.append(String.format("<td>%s</td>", columnName.toString()));
     	}
-    	answerHtml.append("</tr>");
+    	answerHtml.append("</tr></thead>");
     	
     	assertEquals(readHtml.toString(), answerHtml.toString());
     }
@@ -182,6 +178,7 @@ class HTMLExporterTest {
     	// then
     	StringBuilder readHtml = readFile();
     	StringBuilder answerHtml = new StringBuilder();
+    	answerHtml.append("<tbody>");
     	for(Object[] row : dataArr) {
     		answerHtml.append("<tr align = center>");
     		for(Object data : row) {
@@ -189,7 +186,6 @@ class HTMLExporterTest {
     		}
     		answerHtml.append("</tr>");
     	}
-    	
     	assertEquals(answerHtml.toString(), readHtml.toString());
     }
     
@@ -211,7 +207,7 @@ class HTMLExporterTest {
     }
     
 
-    @DisplayName("ConcreteTable의 export 함수로 html export가 성공하여 파일이 생성되었는지")
+    @DisplayName("ConcreteTable의 export 함수로 파일이 생성되는지")
     @Test
     void export_empty_table() throws IOException {
     	
@@ -226,6 +222,31 @@ class HTMLExporterTest {
     	File file = new File(path.toString());
     	assertTrue(file.exists());
     	
+    }
+    
+    @DisplayName("빈 table을 export했을 때 <tbody> tag가 없는지")
+    @Test
+    void check_exported_empty_content() throws IOException{
+    	
+    	// given
+    	Writer out = new FileWriter(path);
+    	
+    	// when
+    	people.export(new HTMLExporter(out));
+    	out.close();
+    	
+    	// then
+    	StringBuilder readHtml = readFile();
+    	StringBuilder answerHtml = new StringBuilder();
+    	answerHtml.append("<html><body><table border=\"1\" width =\"500\" height=\"300\" align =\"center\" >"); 
+    	answerHtml.append(String.format("<thead><tr align =\"center\" height = \"50\"><p><td colspan = \"%s\"> %s </td></p></tr>", columnNames.length, tableName));
+    	
+    	answerHtml.append("<tr align = center>");
+    	for(String columnName : columnNames) {
+    		answerHtml.append(String.format("<td>%s</td>", columnName.toString()));
+    	}
+    	answerHtml.append("</tr></thead></table></body></html>");    	
+    	assertEquals(answerHtml.toString(), readHtml.toString());
     }
     
     
@@ -246,15 +267,15 @@ class HTMLExporterTest {
     	StringBuilder readHtml = readFile();
     	StringBuilder answerHtml = new StringBuilder();
     	answerHtml.append("<html><body><table border=\"1\" width =\"500\" height=\"300\" align =\"center\" >"); 
-    	answerHtml.append(String.format("<tr align =\"center\"><p><td colspan = \"%s\"> %s </td></p></tr>", columnNames.length, tableName));
+    	answerHtml.append(String.format("<thead><tr align =\"center\" height = \"50\"><p><td colspan = \"%s\"> %s </td></p></tr>", columnNames.length, tableName));
     	
     	answerHtml.append("<tr align = center>");
     	for(String columnName : columnNames) {
     		answerHtml.append(String.format("<td>%s</td>", columnName.toString()));
     	}
-    	answerHtml.append("</tr>");
+    	answerHtml.append("</tr></thead>");
     	
-    	
+    	answerHtml.append("<tbody>");
     	for(Object[] row : dataArr) {
     		answerHtml.append("<tr align = center>");
     		for(Object data : row) {
@@ -262,7 +283,7 @@ class HTMLExporterTest {
     		}
     		answerHtml.append("</tr>");
     	}
-    	answerHtml.append("</table></body></html>");
+    	answerHtml.append("</tbody></table></body></html>");
     	
     	assertEquals(answerHtml.toString(), readHtml.toString());
     	
@@ -284,18 +305,18 @@ class HTMLExporterTest {
     	out.close();
     	
     	// then
-    	StringBuilder readHTML = readFile();
+    	StringBuilder readHtml = readFile();
     	StringBuilder answerHtml = new StringBuilder();
     	answerHtml.append("<html><body><table border=\"1\" width =\"500\" height=\"300\" align =\"center\" >"); 
-    	answerHtml.append(String.format("<tr align =\"center\"><p><td colspan = \"%s\"> %s </td></p></tr>", columnNames.length, tableName));
+    	answerHtml.append(String.format("<thead><tr align =\"center\" height = \"50\"><p><td colspan = \"%s\"> %s </td></p></tr>", columnNames.length, tableName));
     	
     	answerHtml.append("<tr align = center>");
     	for(String columnName : columnNames) {
     		answerHtml.append(String.format("<td>%s</td>", columnName.toString()));
     	}
-    	answerHtml.append("</tr>");
+    	answerHtml.append("</tr></thead>");
     	
-    	
+    	answerHtml.append("<tbody>");
     	for(Object[] row : dataArr) {
     		answerHtml.append("<tr align = center>");
     		for(Object data : row) {
@@ -303,10 +324,9 @@ class HTMLExporterTest {
     		}
     		answerHtml.append("</tr>");
     	}
+    	answerHtml.append("</tbody></table></body></html>");
     	
-    	answerHtml.append("</table></body></html>");
-    	
-    	assertEquals(answerHtml.toString(), readHTML.toString());
+    	assertEquals(answerHtml.toString(), readHtml.toString());
     }
 
 }

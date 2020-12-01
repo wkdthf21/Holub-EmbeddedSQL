@@ -56,7 +56,7 @@ import com.holub.tools.ArrayIterator;
  *
  * @see XMLExporter
  */
-@DisplayName("HTML Exporter Test 클래스")
+@DisplayName("XML Exporter Test 클래스")
 class XMLExporterTest {
 	
 	private static final File path = new File("c:/dp2020/orders.xml");
@@ -137,7 +137,7 @@ class XMLExporterTest {
     	for(String columnName : columnNames) {
     		answerXML.append(String.format("<item>%s</item>", columnName.toString()));
     	}
-    	answerXML.append("</columnName></metadata><data>");
+    	answerXML.append("</columnName></metadata>");
     	
     	assertEquals(readXML.toString(), answerXML.toString());
 	}
@@ -157,13 +157,12 @@ class XMLExporterTest {
     	
     	// then
     	StringBuilder readXML = readFile();
-    	
     	StringBuilder answerXML = new StringBuilder();
     	answerXML.append("<metadata><tableName><anonymous></tableName><columnName>");
     	for(String columnName : columnNames) {
     		answerXML.append(String.format("<item>%s</item>", columnName.toString()));
     	}
-    	answerXML.append("</columnName></metadata><data>");
+    	answerXML.append("</columnName></metadata>");
     	
     	assertEquals(readXML.toString(), answerXML.toString());
     }
@@ -185,6 +184,7 @@ class XMLExporterTest {
     	// then
     	StringBuilder readXML = readFile();
     	StringBuilder answerXML = new StringBuilder();
+    	answerXML.append("<data>");
     	for(Object[] row : dataArr) {
     		answerXML.append("<row>");
     		for(Object data : row) {
@@ -209,7 +209,7 @@ class XMLExporterTest {
 		
 		// then
 		StringBuilder readXML = readFile();
-		assertEquals(readXML.toString(), "</data></table>");
+		assertEquals(readXML.toString(), "</table>");
 	}
 	
 	
@@ -229,6 +229,31 @@ class XMLExporterTest {
     }
     
     
+    @DisplayName("빈 table을 export했을 때  <Data> Tag가 없는지")
+    @Test
+    void check_exported_empty_content() throws IOException{
+    	// given
+    	Writer out = new FileWriter(path);
+    	
+    	// when
+    	orders.export(new XMLExporter(out));
+    	out.close();
+    	
+    	// then
+    	StringBuilder readXML = readFile();
+    	StringBuilder answerXML = new StringBuilder();
+    	
+    	answerXML.append("<?xml version=\"1.0\" encoding=\"EUC-KR\"?><table>");
+    	answerXML.append(String.format("<metadata><tableName>%s</tableName><columnName>", tableName));
+    	for(String columnName : columnNames) {
+    		answerXML.append(String.format("<item>%s</item>", columnName.toString()));
+    	}
+    	answerXML.append("</columnName></metadata></table>");
+    	
+    	assertEquals(readXML.toString(), answerXML.toString());
+    }
+    
+
     @DisplayName("ConcreteTable의 export 함수로 export된 데이터 내용이 table에 있는 내용과 동일한지")
     @Test
     void check_exported_content() throws IOException {
