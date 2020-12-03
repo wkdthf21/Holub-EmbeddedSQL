@@ -444,6 +444,7 @@ import com.holub.tools.ArrayIterator;
 	 */
 	public Table select(Selector where, String[] requestedColumns, // {=ConcreteTable.select.default}
 			Table[] otherTables) {
+		
 		// If we're not doing a join, use the more efficient version
 		// of select().
 
@@ -452,11 +453,26 @@ import com.holub.tools.ArrayIterator;
 
 		// Make the current table not be a special case by effectively
 		// prefixing it to the otherTables array.
-
+		
 		Table[] allTables = new Table[otherTables.length + 1];
 		allTables[0] = this;
 		System.arraycopy(otherTables, 0, allTables, 1, otherTables.length);
 
+		// If we need join & requested Columns is *
+		if(requestedColumns == null || requestedColumns.length == 0) {
+			Set<String> columnsSet = new HashSet<>();
+			for(Table otherTable : otherTables) {
+				for(int i = 0; i < otherTable.rows().columnCount(); i++) {
+					columnsSet.add(otherTable.rows().columnName(i));
+				}
+			}
+			for(String columnName : columnNames) columnsSet.add(columnName);
+			requestedColumns = new String[columnsSet.size()];
+			
+			Object[] otherColumnsObjArr = columnsSet.toArray();
+			for(int i = 0; i < otherColumnsObjArr.length; i++) requestedColumns[i] = (String)otherColumnsObjArr[i];
+		}
+		
 		// Create places to hold the result of the join and to hold
 		// iterators for each table involved in the join.
 
@@ -465,9 +481,9 @@ import com.holub.tools.ArrayIterator;
 
 		// Recursively compute the Cartesian product, adding to the
 		// resultTable all rows that the Selector approves
-
 		selectFromCartesianProduct(0, where, requestedColumns, allTables, envelope, resultTable);
 
+		
 		return new UnmodifiableTable(resultTable);
 	}
 
