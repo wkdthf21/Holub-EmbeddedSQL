@@ -1,7 +1,6 @@
 package com.holub.database;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 public class SumVisitor implements AggregationVisitor {
 	
@@ -86,16 +85,5 @@ public class SumVisitor implements AggregationVisitor {
 		}
 		return visit(table, where, sumColumn, others);
 	}
-	
-	
-	private void printTable(Table t) {
-		Cursor current = t.rows();
-		while (current.advance()) {
-			for (Iterator columns = current.columns(); columns.hasNext();)
-				System.out.print((String) columns.next() + " ");
-			System.out.println("");
-		}
-	}
-
 
 }
