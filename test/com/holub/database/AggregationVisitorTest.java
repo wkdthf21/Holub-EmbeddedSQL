@@ -46,7 +46,9 @@ class AggregationVisitorTest {
 		
 		// given
 		// select sum(quantity) from orders
+		List<String> sumColumns = new ArrayList<>();
 		String sumColumn = "quantity";
+		sumColumns.add(sumColumn);
 		SumVisitor sumVisitor = new SumVisitor();
 		Selector where = new Selector.Adapter() {
 			public boolean approve(Cursor[] tables) {
@@ -56,7 +58,7 @@ class AggregationVisitorTest {
 		List<Table> otherTables = null;
 		
 		// when
-		Table result = orders.accept(sumVisitor, where, sumColumn, otherTables);
+		Table result = orders.accept(sumVisitor, where, sumColumns, otherTables);
 		
 		// then
 		System.out.println("select sum(quantity) from orders");
@@ -79,7 +81,9 @@ class AggregationVisitorTest {
 		
 		// given
 		// select sum(quantity) from orders where item = E16-25A 
+		List<String> sumColumns = new ArrayList<>();
 		String sumColumn = "quantity";
+		sumColumns.add(sumColumn);
 		SumVisitor sumVisitor = new SumVisitor();
 		Selector where = new Selector.Adapter() {
 			public boolean approve(Cursor[] tables) {
@@ -89,7 +93,7 @@ class AggregationVisitorTest {
 		List<Table> otherTables = null;
 		
 		// when
-		Table result = orders.accept(sumVisitor, where, sumColumn, otherTables);
+		Table result = orders.accept(sumVisitor, where, sumColumns, otherTables);
 		
 		// then
 		System.out.println("select sum(quantity) from orders where item = E16-25A");
@@ -112,7 +116,9 @@ class AggregationVisitorTest {
 		
 		// given
 		// select sum(quantity) from orders, name 
+		List<String> sumColumns = new ArrayList<>();
 		String sumColumn = "quantity";
+		sumColumns.add(sumColumn);
 		SumVisitor sumVisitor = new SumVisitor();
 		Selector where = new Selector.Adapter() {
 			public boolean approve(Cursor[] tables) {
@@ -124,7 +130,7 @@ class AggregationVisitorTest {
 		otherTables.add(name);
 		
 		// when
-		Table result = orders.accept(sumVisitor, where, sumColumn, otherTables);
+		Table result = orders.accept(sumVisitor, where, sumColumns, otherTables);
 		
 		// then
 		System.out.println("select sum(quantity) from orders, name");
@@ -148,7 +154,9 @@ class AggregationVisitorTest {
 		
 		// given
 		// select sum(quantity) from orders, name where where item = E16-25B
+		List<String> sumColumns = new ArrayList<>();
 		String sumColumn = "quantity";
+		sumColumns.add(sumColumn);
 		SumVisitor sumVisitor = new SumVisitor();
 		Selector where = new Selector.Adapter() {
 			public boolean approve(Cursor[] tables) {
@@ -160,7 +168,7 @@ class AggregationVisitorTest {
 		otherTables.add(name);
 		
 		// when
-		Table result = orders.accept(sumVisitor, where, sumColumn, otherTables);
+		Table result = orders.accept(sumVisitor, where, sumColumns, otherTables);
 		
 		// then
 		System.out.println("select sum(quantity) from orders, name where where item = E16-25B");
@@ -185,7 +193,9 @@ class AggregationVisitorTest {
 		
 		// given
 		// select sum(item) from nullTable
+		List<String> sumColumns = new ArrayList<>();
 		String sumColumn = "count";
+		sumColumns.add(sumColumn);
 		SumVisitor sumVisitor = new SumVisitor();
 		Selector where = new Selector.Adapter() {
 			public boolean approve(Cursor[] tables) {
@@ -197,7 +207,7 @@ class AggregationVisitorTest {
 		
 		
 		// when
-		Table result = nullTable.accept(sumVisitor, where, sumColumn, otherTables);
+		Table result = nullTable.accept(sumVisitor, where, sumColumns, otherTables);
 		
 		// then
 		System.out.println("select sum(item) from nullTable");
@@ -221,7 +231,9 @@ class AggregationVisitorTest {
 		
 		// given
 		// select sum(last) from name
+		List<String> sumColumns = new ArrayList<>();
 		String sumColumn = "last";
+		sumColumns.add(sumColumn);
 		SumVisitor sumVisitor = new SumVisitor();
 		Selector where = new Selector.Adapter() {
 			public boolean approve(Cursor[] tables) {
@@ -234,7 +246,7 @@ class AggregationVisitorTest {
 		// then
 	    assertThrows(NumberFormatException.class, 
 	            ()->{
-	            	name.accept(sumVisitor, where, sumColumn, otherTables);
+	            	name.accept(sumVisitor, where, sumColumns, otherTables);
 	            });
 	}
 	
