@@ -114,4 +114,19 @@ public class UnmodifiableTable implements Table
 	 *  that was passed to the constructor. Use the method with care.
 	 */
 	public Table extract(){ return wrapped;	}
+
+	
+	/**
+	 * @author wkdthf21
+	 * For AggregationVisitor test
+	 */
+	public Table accept(AggregationVisitor visitor, Selector where, String sumColumn, Table[] otherTables) {
+		// TODO Auto-generated method stub
+		return visitor.visit(this, where, sumColumn, otherTables);
+	}
+	
+	public Table accept(AggregationVisitor visitor, Selector where, String sumColumn, Collection otherTables) {
+		// TODO Auto-generated method stub
+		return visitor.visit(this, where, sumColumn, otherTables);
+	}
 }
