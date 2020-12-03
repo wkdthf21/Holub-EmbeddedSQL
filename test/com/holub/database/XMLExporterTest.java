@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -60,9 +61,10 @@ import com.holub.tools.ArrayIterator;
 class XMLExporterTest {
 	
 	private static final File path = new File("c:/dp2020/orders.xml");
-	private static Table orders;
-	private static String tableName = "orders";
-	private static String[] columnNames = { "item", "quantity", "date" };
+	
+	private Table orders;
+	private String tableName = "orders";
+	private String[] columnNames = { "item", "quantity", "date" };
 	
 	private LinkedList<Object[]> rowSet = new LinkedList<>();
 	private Object[][] dataArr = {
@@ -80,8 +82,8 @@ class XMLExporterTest {
     	return readXML;
 	}
 	
-	@BeforeAll
-	static void create_test_table() throws IOException {
+	@BeforeEach
+	void create_test_table() throws IOException {
 		orders = TableFactory.create(tableName, columnNames);
 		System.out.println(tableName + " table is created");
 	}
