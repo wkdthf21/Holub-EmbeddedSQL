@@ -1,6 +1,7 @@
 package com.holub.database;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 public class SumVisitor implements AggregationVisitor {
 	
@@ -10,7 +11,7 @@ public class SumVisitor implements AggregationVisitor {
 	 */
 	
 	@Override
-	public Table visit(UnmodifiableTable table, Selector where, String sumColumn, Table[] otherTables) {
+	public Table visit(UnmodifiableTable table, Selector where, String[] sumColumns, Table[] otherTables) {
 		// TODO Auto-generated method stub
 		
 		// get select * from [otherTables] where [where]
@@ -20,6 +21,7 @@ public class SumVisitor implements AggregationVisitor {
 		// calculate sum
 		Cursor cursor = allResult.rows();
 		int sum = 0;
+		String sumColumn = sumColumns[0];
 		while(cursor.advance()) {
 			Object obj = cursor.column(sumColumn);
 			sum += Integer.parseInt((String) obj);
@@ -35,13 +37,22 @@ public class SumVisitor implements AggregationVisitor {
 	
 
 	@Override
-	public Table visit(UnmodifiableTable table, Selector where, String sumColumn, Collection otherTables) {
+	public Table visit(UnmodifiableTable table, Selector where, Collection requestedColumns, Collection otherTables) {
 		// TODO Auto-generated method stub\
+		String[] columnNames = null;
 		Table[] others = null;
+		if(requestedColumns != null) {
+			columnNames = new String[requestedColumns.size()];
+			int i = 0;
+			Iterator column = requestedColumns.iterator();
+
+			while (column.hasNext())
+				columnNames[i++] = column.next().toString();
+		}
 		if(otherTables != null) {
 			others = (Table[]) otherTables.toArray(new Table[otherTables.size()]);
 		}
-		return visit(table, where, sumColumn, others);
+		return visit(table, where, columnNames, others);
 	}
 	
 	
@@ -51,7 +62,7 @@ public class SumVisitor implements AggregationVisitor {
 	 */
 	
 	@Override
-	public Table visit(ConcreteTable table, Selector where, String sumColumn, Table[] otherTables) {
+	public Table visit(ConcreteTable table, Selector where, String[] sumColumns, Table[] otherTables) {
 		// TODO Auto-generated method stub
 		// get select * from [otherTables] where [where]
 		String[] requestedColumns = null;
@@ -60,6 +71,7 @@ public class SumVisitor implements AggregationVisitor {
 		// calculate sum
 		Cursor cursor = allResult.rows();
 		int sum = 0;
+		String sumColumn = sumColumns[0];
 		while(cursor.advance()) {
 			Object obj = cursor.column(sumColumn);
 			String str = (String) obj;
@@ -77,13 +89,22 @@ public class SumVisitor implements AggregationVisitor {
 
 
 	@Override
-	public Table visit(ConcreteTable table, Selector where, String sumColumn, Collection otherTables) {
+	public Table visit(ConcreteTable table, Selector where, Collection requestedColumns, Collection otherTables) {
 		// TODO Auto-generated method stub
+		String[] columnNames = null;
 		Table[] others = null;
+		if(requestedColumns != null) {
+			columnNames = new String[requestedColumns.size()];
+			int i = 0;
+			Iterator column = requestedColumns.iterator();
+
+			while (column.hasNext())
+				columnNames[i++] = column.next().toString();
+		}
 		if(otherTables != null) {
 			others = (Table[]) otherTables.toArray(new Table[otherTables.size()]);
 		}
-		return visit(table, where, sumColumn, others);
+		return visit(table, where, columnNames, others);
 	}
 
 }

@@ -20,10 +20,10 @@ import java.util.Collection;
  */
 public interface AggregationVisitor {
 	
-	public Table visit(UnmodifiableTable table, Selector where, String sumColumn, Table[] otherTables);
-	public Table visit(UnmodifiableTable table, Selector where, String sumColumn, Collection otherTables);
+	public Table visit(UnmodifiableTable table, Selector where, String[] sumColumn, Table[] otherTables);
+	public Table visit(UnmodifiableTable table, Selector where, Collection sumColumn, Collection otherTables);
 	
-	public Table visit(ConcreteTable table, Selector where, String sumColumn, Table[] otherTables);
-	public Table visit(ConcreteTable table, Selector where, String sumColumn, Collection otherTables);
+	public Table visit(ConcreteTable table, Selector where, String[] sumColumn, Table[] otherTables);
+	public Table visit(ConcreteTable table, Selector where, Collection sumColumn, Collection otherTables);
 	
 }

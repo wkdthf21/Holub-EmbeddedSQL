@@ -120,12 +120,12 @@ public class UnmodifiableTable implements Table
 	 * @author wkdthf21
 	 * For AggregationVisitor test
 	 */
-	public Table accept(AggregationVisitor visitor, Selector where, String sumColumn, Table[] otherTables) {
+	public Table accept(AggregationVisitor visitor, Selector where, String[] sumColumn, Table[] otherTables) {
 		// TODO Auto-generated method stub
 		return visitor.visit(this, where, sumColumn, otherTables);
 	}
 	
-	public Table accept(AggregationVisitor visitor, Selector where, String sumColumn, Collection otherTables) {
+	public Table accept(AggregationVisitor visitor, Selector where, Collection sumColumn, Collection otherTables) {
 		// TODO Auto-generated method stub
 		return visitor.visit(this, where, sumColumn, otherTables);
 	}

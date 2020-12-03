@@ -43,8 +43,8 @@ public interface Table extends Serializable, Cloneable
 	 * @author wkdthf21
 	 * For AggregationVisitor test
 	 */
-	Table accept(AggregationVisitor visitor, Selector where, String sumColumn, Table[] otherTables);
-	Table accept(AggregationVisitor visitor, Selector where, String sumColumn, Collection otherTables);
+	Table accept(AggregationVisitor visitor, Selector where, String[] sumColumn, Table[] otherTables);
+	Table accept(AggregationVisitor visitor, Selector where, Collection sumColumn, Collection otherTables);
 	
 	
 	/** Return a shallow copy of the table (the contents are not
