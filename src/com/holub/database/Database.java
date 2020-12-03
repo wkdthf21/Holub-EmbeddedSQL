@@ -181,6 +181,10 @@ statement       ::=
                 |   DELETE  FROM IDENTIFIER WHERE expr
                 |   SELECT  [INTO identifier] idList
                                         FROM idList [WHERE expr]
+                                        
+                |   SELECT [SUM | MIN | MAX] 
+                						FROM idList [WHERE expr]
+
 
 idList          ::= IDENTIFIER idList' | STAR
 idList'         ::= COMMA IDENTIFIER idList'
@@ -413,8 +417,14 @@ public final class Database
 		NUMERIC		= tokens.create( "decimal|numeric|real|double"),
 		CHAR		= tokens.create( "(var)?char"				),
 		DATE		= tokens.create( "date(\\s*\\(.*?\\))?"		),
-
+		
+		SUM = tokens.create("SUM\\([a-zA-Z_0-9/\\\\:~]+\\)"),
+		MIN = tokens.create("MIN\\([a-zA-Z_0-9/\\\\:~]+\\)"),
+		MAX = tokens.create("MAX\\([a-zA-Z_0-9/\\\\:~]+\\)"),
+		
+		
 		IDENTIFIER	= tokens.create( "[a-zA-Z_0-9/\\\\:~]+"		); //{=Database.lastToken}
+		
 
 	private String  expression;	// SQL expression being parsed
 	private Scanner in;			// The current scanner.
@@ -796,20 +806,55 @@ public final class Database
 			affectedRows = doDelete( tableName, expr() );
 		}
 		else if( in.matchAdvance(SELECT) != null )
-		{	List columns = idList();
+		{	
+			
+			List columns = null;
+			String aggregationColumn;
+			AggregationVisitor aggregationVisitor = null;
+			if((aggregationColumn = in.matchAdvance(SUM)) != null){
+				aggregationVisitor = new SumVisitor();
+				aggregationColumn = aggregationColumn.substring(4, aggregationColumn.length()-1);
+				columns = new ArrayList();
+				columns.add(aggregationColumn);
+			}
+			else if((aggregationColumn = in.matchAdvance(MAX)) != null){
+				System.out.println("MAX 발견");
+			}
+			else if((aggregationColumn = in.matchAdvance(MIN)) != null){
+				System.out.println("MIN 발견");
+			}
+			
+			
+			// Aggregation Function
+			if(aggregationVisitor != null) {
+				in.required( FROM );
+				List requestedTableNames = idList();
+				Expression where = (in.matchAdvance(WHERE) == null)
+									? null : expr();
+				
+				Table result = doSelectWithAggregation(columns, aggregationVisitor, 
+									requestedTableNames, where);
+				
+				return result;
+			}
+			// Not Aggregation Function
+			else {	
+				columns = idList();
+				String into = null;
+				if( in.matchAdvance(INTO) != null )
+					into = in.required(IDENTIFIER);
 
-			String into = null;
-			if( in.matchAdvance(INTO) != null )
-				into = in.required(IDENTIFIER);
+				in.required( FROM );
+				List requestedTableNames = idList();
 
-			in.required( FROM );
-			List requestedTableNames = idList();
-
-			Expression where = (in.matchAdvance(WHERE) == null)
-								? null : expr();
-			Table result = doSelect(columns, into,
-								requestedTableNames, where );
-			return result;
+				Expression where = (in.matchAdvance(WHERE) == null)
+									? null : expr();
+				Table result = doSelect(columns, into,
+									requestedTableNames, where );
+				return result;
+			
+			}
+			
 		}
 		else
 		{	error("Expected insert, create, drop, use, "
@@ -1537,6 +1582,68 @@ public final class Database
 		{	throw (ParseFailure) container.contents();
 		}
 	}
+	
+	//======================================================================
+	// Workhorse methods called from the parser.
+	//
+	private Table doSelectWithAggregation( List columns, AggregationVisitor visitor,
+											List requestedTableNames,
+											final Expression where )
+											throws ParseFailure
+	{
+
+		Iterator tableNames = requestedTableNames.iterator();
+
+		assert tableNames.hasNext() : "No tables to use in select!" ;
+
+		// The primary table is the first one listed in the
+		// FROM clause. The participantsInJoin are the other
+		// tables listed in the FROM clause. We're passed in the
+		// table names; use these names to get the actual Table
+		// objects.
+
+		Table primary = (Table) tables.get( (String) tableNames.next() );
+
+		List participantsInJoin = new ArrayList();
+		while( tableNames.hasNext() )
+		{	String participant = (String) tableNames.next();
+			participantsInJoin.add( tables.get(participant) );
+		}
+
+		// Now do the select operation. First create a Strategy
+		// object that picks the correct rows, then pass that
+		// object through to the primary table's select() method.
+
+		Selector selector = (where == null) ? Selector.ALL : //{=Database.selector}
+			new Selector.Adapter()
+			{	public boolean approve(Cursor[] tables)
+				{	try
+					{	
+						Value result = where.evaluate(tables);
+
+						verify( result instanceof BooleanValue,
+								"WHERE clause must yield boolean result" );
+						return ((BooleanValue)result).value();
+					}
+					catch( ParseFailure e )
+					{	throw new ThrowableContainer(e);
+					}
+				}
+			};
+
+		try
+		{	
+			
+			Table result = primary.accept(visitor, selector, columns, participantsInJoin);
+
+			return result;
+		}
+		catch( ThrowableContainer container )
+		{	throw (ParseFailure) container.contents();
+		}
+	}
+	
+	
 	//@workhorse-end
 	//--------------------------------------------------------------
 	public static class Test
