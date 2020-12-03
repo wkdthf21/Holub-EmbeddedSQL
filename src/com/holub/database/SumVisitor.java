@@ -1,5 +1,6 @@
 package com.holub.database;
 
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -24,7 +25,11 @@ public class SumVisitor implements AggregationVisitor {
 		String sumColumn = sumColumns[0];
 		while(cursor.advance()) {
 			Object obj = cursor.column(sumColumn);
-			sum += Integer.parseInt((String) obj);
+			try {
+				sum += Integer.parseInt((String) obj);
+			}catch(NumberFormatException e) {
+				throw new NumberFormatException( "Selected Sum parameter's column cannot be added" );
+			}
 		}
 		
 		// make result table
@@ -59,10 +64,11 @@ public class SumVisitor implements AggregationVisitor {
 
 	/*****************************************************************************************
 	 * ConcreteTable
+	 * @throws SQLException 
 	 */
 	
 	@Override
-	public Table visit(ConcreteTable table, Selector where, String[] sumColumns, Table[] otherTables) {
+	public Table visit(ConcreteTable table, Selector where, String[] sumColumns, Table[] otherTables) throws NumberFormatException {
 		// TODO Auto-generated method stub
 		// get select * from [otherTables] where [where]
 		String[] requestedColumns = null;
@@ -75,8 +81,14 @@ public class SumVisitor implements AggregationVisitor {
 		while(cursor.advance()) {
 			Object obj = cursor.column(sumColumn);
 			String str = (String) obj;
-			if(str != null && str.isBlank() == false) 
-				sum += Integer.parseInt((String) obj);
+			if(str != null && str.isBlank() == false) {
+				try {
+					sum += Integer.parseInt((String) obj);
+				}catch(NumberFormatException e) {
+					throw new NumberFormatException( "Selected Sum parameter's column cannot be added" );
+				}
+			}
+				
 		}
 		
 		// make result table
