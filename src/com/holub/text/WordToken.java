@@ -29,6 +29,8 @@ package com.holub.text;
 import java.util.*;
 import java.util.regex.*;
 
+import com.holub.text.visitor.TokenVisitor;
+
 /** Recognize a token that looks like a word. The match
  *  is case insensitive. To be recognized, the input
  *  must match the pattern passed to the constructor,
@@ -83,4 +85,5 @@ public class WordToken implements Token
 
 	public String lexeme()	{ return pattern; }
 	public String toString(){ return pattern; }
+	public void accept(TokenVisitor visitor, StringBuilder sb) { visitor.visit(this, sb); }
 }

@@ -29,6 +29,8 @@ package com.holub.text;
 import java.util.*;
 import java.util.regex.*;
 
+import com.holub.text.visitor.TokenVisitor;
+
 /** Matches a simple symbol that doesn't have to be on a "word"
  *  boundary; punctuation, for example. SimpleToken
  *  is very efficient, but does not recognize characters in
@@ -56,4 +58,5 @@ public class SimpleToken implements Token
 
 	public String lexeme()  { return pattern; }
 	public String toString(){ return pattern; }
+	public void accept(TokenVisitor visitor, StringBuilder sb) { visitor.visit(this, sb); }
 }

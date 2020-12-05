@@ -26,6 +26,8 @@
  */
 package com.holub.text;
 
+import com.holub.text.visitor.TokenVisitor;
+
 /** The Begin token is special in that it has no width, and
  *	doesn't match anything in the input. It's used solely
  *	as a convenient initial value for the current-token
@@ -40,4 +42,5 @@ public class BeginToken implements Token
 {	public boolean match(String input, int offset){ return false; }
 	public String lexeme()						  { return ""; }
 	public String toString()					  { return "BeginToken"; }
+	public void accept(TokenVisitor visitor, StringBuilder sb) { visitor.visit(this, sb); }
 }

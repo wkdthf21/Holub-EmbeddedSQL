@@ -29,6 +29,8 @@ package com.holub.text;
 import java.util.*;
 import java.util.regex.*;
 
+import com.holub.text.visitor.TokenVisitor;
+
 /** Matches a token specified by a regular expression.
  *  (as described in the {@link java.util.regex.Pattern}
  *  class.
@@ -64,4 +66,5 @@ public class RegexToken implements Token
 
 	public String lexeme()	{ return matcher.group(); }
 	public String toString(){ return id; }
+	public void accept(TokenVisitor visitor, StringBuilder sb) { visitor.visit(this, sb); }
 }
