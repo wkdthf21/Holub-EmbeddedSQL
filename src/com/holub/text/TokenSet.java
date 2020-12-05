@@ -124,7 +124,7 @@ public class TokenSet
 	
 	/**
 	 * @author wkdthf21
-	 * @return
+	 * @return String
 	 * get keywords of SQL statement supported by Holub-SQL
 	 */
 	public String getSupportedKeywords() {
@@ -138,7 +138,7 @@ public class TokenSet
 	
 	/**
 	 * @author wkdthf21
-	 * @return
+	 * @return String
 	 * print all tokens with token type
 	 */
 	public String printAllTokens() {
