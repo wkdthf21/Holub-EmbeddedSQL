@@ -26,6 +26,8 @@
  */
 package com.holub.text;
 
+import com.holub.text.visitor.TokenVisitor;
+
 /***
  *  An input token (a lexical symbol in the input stream).
  *	@include /etc/license.txt
@@ -33,6 +35,13 @@ package com.holub.text;
 
 public interface Token
 {	
+	
+	/**
+	 * @author wkdthf21
+	 * Accept a variety of TokenVisitor
+	 */
+	void accept(TokenVisitor visitor, StringBuilder keywordSb);
+	
 	/** Returns true if the sequence at the indicated
 	 *  offset from the beginning of the indicated
 	 *  input string matches the current token.
