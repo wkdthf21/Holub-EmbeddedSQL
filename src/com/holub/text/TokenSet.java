@@ -27,7 +27,12 @@
 package com.holub.text;
 
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.regex.*;
+
+import com.holub.text.visitor.AllTokenPrintVisitor;
+import com.holub.text.visitor.KeywordPrintVisitor;
+import com.holub.text.visitor.TokenVisitor;
 
 /***
  *  A token set is a collection of tokens that define all possible
@@ -115,7 +120,37 @@ public class TokenSet
 		members.add( token );
 		return token;
 	}
+	
+	
+	/**
+	 * @author wkdthf21
+	 * @return
+	 * get keywords of SQL statement supported by Holub-SQL
+	 */
+	public String getSupportedKeywords() {
+		Iterator<Token> iterator = this.members.iterator();
+		TokenVisitor visitor  = new KeywordPrintVisitor();
+		StringBuilder sb = new StringBuilder();
+		while(iterator.hasNext()) iterator.next().accept(visitor, sb);
+		sb.append("\r\n\r\n");
+		return sb.toString();
+	}
+	
+	/**
+	 * @author wkdthf21
+	 * @return
+	 * get keywords of SQL statement supported by Holub-SQL
+	 */
+	public String printAllTokens() {
+		
+		Iterator<Token> iterator = this.members.iterator();
+		TokenVisitor visitor  = new AllTokenPrintVisitor();
+		StringBuilder sb = new StringBuilder();
+		while(iterator.hasNext()) iterator.next().accept(visitor, sb);
+		return sb.toString();
+	}
 
+	
 	/** Return true if the string argument contains any of the
 	 *  following characters: \\[]{}$^*+?|()
 	 */
