@@ -29,10 +29,11 @@ import java.sql.*;
 /***
  * @include /etc/license.txt
  */
-public class StatementAdapter implements java.sql.Statement
+public abstract class StatementAdapter implements java.sql.Statement
 {
 public StatementAdapter() {}
 
+public abstract String getSupportedKeywords();
 public void setFetchSize(int fetchSize) throws SQLException {throw new SQLException("Statement.setFetchSize(int fetchSize) not supported");}
 public int getFetchSize() throws SQLException {throw new SQLException("Statement.getFetchSize() not supported");}
 public int getMaxRows() throws SQLException {throw new SQLException("Statement.getMaxRows() not supported");}

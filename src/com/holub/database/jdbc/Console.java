@@ -29,6 +29,9 @@ import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import com.holub.database.jdbc.adapters.StatementAdapter;
+
 import java.sql.*;
 
 /** This program is a toy database-console window that lets you
@@ -248,6 +251,7 @@ public class Console
 		{	
 			connection = DriverManager.getConnection("file:/"+databaseName, "harpo", "swordfish");
 			statement = connection.createStatement();
+			if(statement instanceof StatementAdapter) sqlOut.setText(((StatementAdapter) statement).getSupportedKeywords()); 
 		}
 		catch( SQLException e )
 		{	displayException( "Couldn't open database: " + databaseName, e );

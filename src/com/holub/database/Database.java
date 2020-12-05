@@ -1569,4 +1569,15 @@ public final class Database
 			System.exit(0);
 		}
 	}
+	
+	
+	/**
+	 * @author wkdthf21
+	 * @return
+	 * get keywords of sql statement supported by Holub-SQL
+	 */
+	public String getSupportedKeywords() {
+		return tokens.getSupportedKeywords();
+	}
+	
 }

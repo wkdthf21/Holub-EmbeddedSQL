@@ -66,4 +66,14 @@ public class JDBCStatement extends StatementAdapter
 	public void close() throws SQLException
 	{	// does nothing.
 	}
+	
+	/**
+	 * @author wkdthf21
+	 * @return
+	 * get keywords of sql statement supported by Holub-SQL
+	 */
+	@Override
+	public String getSupportedKeywords() {
+		return database.getSupportedKeywords();
+	}
 }
