@@ -60,10 +60,10 @@ import com.holub.tools.ArrayIterator;
 @DisplayName("XML Exporter Test 클래스")
 class XMLExporterTest {
 	
-	private static final File path = new File("c:/dp2020/orders.xml");
+	private static final File path = new File("c:/dp2020/orders-exporter.xml");
 	
 	private Table orders;
-	private String tableName = "orders";
+	private String tableName = "orders-exporter";
 	private String[] columnNames = { "item", "quantity", "date" };
 	
 	private LinkedList<Object[]> rowSet = new LinkedList<>();
