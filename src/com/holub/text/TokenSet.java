@@ -139,7 +139,7 @@ public class TokenSet
 	/**
 	 * @author wkdthf21
 	 * @return
-	 * get keywords of SQL statement supported by Holub-SQL
+	 * print all tokens with token type
 	 */
 	public String printAllTokens() {
 		
