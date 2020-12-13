@@ -27,6 +27,7 @@
 package com.holub.database;
 
 import java.util.*;
+import java.util.jar.Attributes.Name;
 import java.io.*;
 import java.text.NumberFormat;
 import java.net.URI;
@@ -389,7 +390,8 @@ public final class Database
 		USE			= tokens.create( "'USE"		),
 		VALUES 		= tokens.create( "'VALUES"	),
 		WHERE		= tokens.create( "'WHERE"	),
-
+		DISTINCT    = tokens.create( "DISTINCT" ),
+		
 		WORK		= tokens.create( "WORK|TRAN(SACTION)?"		),
 		ADDITIVE	= tokens.create( "\\+|-" 					),
 		STRING		= tokens.create( "(\".*?\")|('.*?')"		),
@@ -783,7 +785,12 @@ public final class Database
 			affectedRows = doDelete( tableName, expr() );
 		}
 		else if( in.matchAdvance(SELECT) != null )
-		{	List columns = idList();
+		{	
+			
+			boolean isDistinct = false;
+			if(in.matchAdvance(DISTINCT) != null) isDistinct = true;
+			
+			List columns = idList();
 
 			String into = null;
 			if( in.matchAdvance(INTO) != null )
@@ -794,8 +801,10 @@ public final class Database
 
 			Expression where = (in.matchAdvance(WHERE) == null)
 								? null : expr();
-			Table result = doSelect(columns, into,
+			
+			Table result = doSelect(isDistinct, columns, into,
 								requestedTableNames, where );
+
 			return result;
 		}
 		else
@@ -1375,13 +1384,15 @@ public final class Database
 	//@workhorse-start
 	//======================================================================
 	// Workhorse methods called from the parser.
-	//
-	private Table doSelect( List columns, String into,
-										List requestedTableNames,
-										final Expression where )
-										throws ParseFailure
-	{
-
+	
+	
+	
+	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	// @author : wkdthf21
+	// Select with SelectAlgorithm subclasses
+	private Table doSelect( boolean isDistinct, List columns, String into, List requestedTableNames, final Expression where )
+			throws ParseFailure{
+		
 		Iterator tableNames = requestedTableNames.iterator();
 
 		assert tableNames.hasNext() : "No tables to use in select!" ;
@@ -1422,8 +1433,35 @@ public final class Database
 			};
 
 		try
-		{	Table result = primary.select(selector, columns, participantsInJoin);
-
+		{	
+			// Select * From TALBE_NAME_LIST Where EXPRESSION
+			SelectAlgorithm selectAlgorithm = new DefaultSelect(primary, participantsInJoin, selector);
+			
+			// If statement has GROUP BY
+			/* add later...	*/
+			
+			// If statement has specific columns
+			if(columns != null) {
+				selectAlgorithm = new ColumnsSelect(selectAlgorithm, columns);
+			}
+			
+			// If statement has DISTINCT
+			if(isDistinct) {
+				selectAlgorithm = new DistinctSelect(selectAlgorithm);
+			}
+			
+			// If statement has ORDER BY
+			/* add later...	*/
+			
+			
+			// If statement has INTO
+			/* add later...	*/
+			
+			
+			// do select
+			Table result = selectAlgorithm.doSelect();
+			
+			
 			// If this is a "SELECT INTO <table>" request, remove the 
 			// returned table from the UnmodifiableTable wrapper, give
 			// it a name, and put it into the tables Map.
@@ -1438,7 +1476,10 @@ public final class Database
 		catch( ThrowableContainer container )
 		{	throw (ParseFailure) container.contents();
 		}
+		
 	}
+	
+	
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	private int doInsert(String tableName, List columns, List values)
 												throws ParseFailure
