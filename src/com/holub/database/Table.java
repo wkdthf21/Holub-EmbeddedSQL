@@ -213,33 +213,6 @@ public interface Table extends Serializable, Cloneable
 	 * 		that were accepted by the {@link Selector}.
 	 */
 
-	Table select(Selector where, String[] requestedColumns, Table[] other);
-
-	/** A more efficient version of
-	 * <code>select(where, requestedColumns, null);</code>
-	 */
-	Table select(Selector where, String[] requestedColumns );
-
-	/** A more efficient version of <code>select(where, null, null);</code>
-	 */
-	Table select(Selector where);
-
-	/** A convenience method that translates Collections to arrays, then
-	 *  calls {@link #select(Selector,String[],Table[])};
-	 *  @param requestedColumns a collection of String objects
-	 *  			representing the desired columns.
-	 *	@param other a collection of additional Table objects to join to
-	 *				the current one for the purposes of this SELECT
-	 *				operation.
-	 */
-	Table select(Selector where, Collection requestedColumns,
-												Collection other);
-
-	/** Convenience method, translates Collection to String array, then
-	 *  calls String-array version.
-	 */
-	Table select(Selector where, Collection requestedColumns );
-
 	/** Return an iterator across the rows of the current table.
 	 */
 	Cursor rows();

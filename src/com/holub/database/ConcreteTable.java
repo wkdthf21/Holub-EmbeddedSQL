@@ -402,202 +402,6 @@ import com.holub.tools.ArrayIterator;
 		return deleted;
 	}
 
-	// @select-start
-	// ----------------------------------------------------------------------
-	public Table select(Selector where) {
-		Table resultTable = new ConcreteTable(null, (String[]) columnNames.clone());
-
-		Results currentRow = (Results) rows();
-		Cursor[] envelope = new Cursor[] { currentRow };
-
-		while (currentRow.advance()) {
-			if (where.approve(envelope))
-				resultTable.insert((Object[]) currentRow.cloneRow());
-		}
-		return new UnmodifiableTable(resultTable);
-	}
-
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public Table select(Selector where, String[] requestedColumns) {
-		if (requestedColumns == null)
-			return select(where);
-
-		Table resultTable = new ConcreteTable(null, (String[]) requestedColumns.clone());
-
-		Results currentRow = (Results) rows();
-		Cursor[] envelope = new Cursor[] { currentRow };
-
-		while (currentRow.advance()) {
-			if (where.approve(envelope)) {
-				Object[] newRow = new Object[requestedColumns.length];
-				for (int column = 0; column < requestedColumns.length; ++column) {
-					newRow[column] = currentRow.column(requestedColumns[column]);
-				}
-				resultTable.insert(newRow);
-			}
-		}
-		return new UnmodifiableTable(resultTable);
-	}
-
-	/**
-	 * This version of select does a join
-	 */
-	public Table select(Selector where, String[] requestedColumns, // {=ConcreteTable.select.default}
-			Table[] otherTables) {
-		
-		// If we're not doing a join, use the more efficient version
-		// of select().
-
-		if (otherTables == null || otherTables.length == 0)
-			return select(where, requestedColumns);
-
-		// Make the current table not be a special case by effectively
-		// prefixing it to the otherTables array.
-		
-		Table[] allTables = new Table[otherTables.length + 1];
-		allTables[0] = this;
-		System.arraycopy(otherTables, 0, allTables, 1, otherTables.length);
-
-		// If we need join & requested Columns is *
-		if(requestedColumns == null || requestedColumns.length == 0) {
-			Set<String> columnsSet = new HashSet<>();
-			for(Table otherTable : otherTables) {
-				for(int i = 0; i < otherTable.rows().columnCount(); i++) {
-					columnsSet.add(otherTable.rows().columnName(i));
-				}
-			}
-			for(String columnName : columnNames) columnsSet.add(columnName);
-			requestedColumns = new String[columnsSet.size()];
-			
-			Object[] otherColumnsObjArr = columnsSet.toArray();
-			for(int i = 0; i < otherColumnsObjArr.length; i++) requestedColumns[i] = (String)otherColumnsObjArr[i];
-		}
-		
-		// Create places to hold the result of the join and to hold
-		// iterators for each table involved in the join.
-
-		Table resultTable = new ConcreteTable(null, requestedColumns);
-		Cursor[] envelope = new Cursor[allTables.length];
-
-		// Recursively compute the Cartesian product, adding to the
-		// resultTable all rows that the Selector approves
-		selectFromCartesianProduct(0, where, requestedColumns, allTables, envelope, resultTable);
-
-		
-		return new UnmodifiableTable(resultTable);
-	}
-
-	/**
-	 * Think of the Cartesian product as a kind of tree. That is given one table
-	 * with rows A and B, and another table with rows C and D, you can look at the
-	 * product like this:
-	 *
-	 * root ______|______ | | A B ____|____ ____|____ | | | | C D C D
-	 *
-	 * The tree is as deep as the number of tables we're joining. Every possible
-	 * path from the root to a leaf represents one row in the Cartesian product. The
-	 * current method effectively traverses this tree recursively without building
-	 * an actual tree. It assembles an array of iterators (one for each table)
-	 * positioned at the current place in the set of rows as it recurses to a leaf,
-	 * and then asks the selector whether or not to approve that row. It then goes
-	 * up a notch, advances the correct iterator, and recurses back down.
-	 */
-	private static void selectFromCartesianProduct(int level, Selector where, String[] requestedColumns,
-			Table[] allTables, Cursor[] allIterators, Table resultTable) {
-		allIterators[level] = allTables[level].rows();
-
-		while (allIterators[level].advance()) { // If we haven't reached the tips of the branches yet,
-												// go down one more level.
-
-			if (level < allIterators.length - 1)
-				selectFromCartesianProduct(level + 1, where, requestedColumns, allTables, allIterators, resultTable);
-
-			// If we are at the leaf level, then get approval for
-			// the fully-assembled row, and add the row to the table
-			// if it's approved.
-
-			if (level == allIterators.length - 1) {
-				if (where.approve(allIterators))
-					insertApprovedRows(resultTable, requestedColumns, allIterators);
-			}
-		}
-	}
-
-	/**
-	 * Insert an approved row into the result table:
-	 * 
-	 * <PRE>
-	 * 		for( every requested column )
-	 * 			for( every table in the join )
-	 * 				if the requested column is in the current table
-	 * 					add the associated value to the result table
-	 *
-	 * </PRE>
-	 * 
-	 * Only one column with a given name is added, even if that column appears in
-	 * multiple tables. Columns in tables at the beginning of the list take
-	 * precedence over identically named columns that occur later in the list.
-	 */
-	private static void insertApprovedRows(Table resultTable, String[] requestedColumns, Cursor[] allTables) {
-
-		Object[] resultRow = new Object[requestedColumns.length];
-
-		for (int i = 0; i < requestedColumns.length; ++i) {
-			for (int table = 0; table < allTables.length; ++table) {
-				try {
-					resultRow[i] = allTables[table].column(requestedColumns[i]);
-					break; // if the assignment worked, do the next column
-				} catch (Exception e) { // otherwise, try the next table
-				}
-			}
-		}
-		resultTable.insert( /* requestedColumns, */ resultRow);
-	}
-
-	/**
-	 * A collection variant on the array version. Just converts the collection to an
-	 * array and then chains to the other version
-	 * ({@linkplain #select(Selector,String[],Table[]) see}).
-	 * 
-	 * @param requestedColumns the value returned from the {@link #toString} method
-	 *                         of the elements of this collection are used as the
-	 *                         column names.
-	 * @param other            Collection of tables to join to the current one,
-	 *                         <code>null</code>if none.
-	 * @throws ClassCastException if any elements of the <code>other</code>
-	 *                            collection do not implement the {@link Table}
-	 *                            interface.
-	 */
-	public Table select(Selector where, Collection requestedColumns, Collection other) {
-		String[] columnNames = null;
-		Table[] otherTables = null;
-
-		if (requestedColumns != null) // SELECT *
-		{
-			// Can't cast an Object[] to a String[], so make a copy to ensure
-			// type safety.
-
-			columnNames = new String[requestedColumns.size()];
-			int i = 0;
-			Iterator column = requestedColumns.iterator();
-
-			while (column.hasNext())
-				columnNames[i++] = column.next().toString();
-		}
-
-		if (other != null)
-			otherTables = (Table[]) other.toArray(new Table[other.size()]);
-
-		return select(where, columnNames, otherTables);
-	}
-
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	public Table select(Selector where, Collection requestedColumns) {
-		return select(where, requestedColumns, null);
-	}
-
-	// @select-end
-	// ----------------------------------------------------------------------
 	// Housekeeping stuff
 	//
 	public String name() {
@@ -681,11 +485,6 @@ import com.holub.tools.ArrayIterator;
 				testDelete();
 			} catch (Throwable t) {
 				report(t, "Delete");
-			}
-			try {
-				testSelect();
-			} catch (Throwable t) {
-				report(t, "Select");
 			}
 			try {
 				testStore();
@@ -776,49 +575,6 @@ import com.holub.tools.ArrayIterator;
 			System.out.println(deleted + " rows affected\n");
 		}
 
-		public void testSelect() {
-			Selector flintstoneSelector = new Selector.Adapter() {
-				public boolean approve(Cursor[] tables) {
-					return tables[0].column("last").equals("Flintstone");
-				}
-			};
-
-			// SELECT first, last FROM people WHERE last = "Flintstone"
-			// The collection version chains to the string version, so the
-			// following call tests both versions
-
-			List columns = new ArrayList();
-			columns.add("first");
-			columns.add("last");
-
-			Table result = people.select(flintstoneSelector, columns);
-			print(result);
-
-			// SELECT * FROM people WHERE last = "Flintstone"
-			result = people.select(flintstoneSelector);
-			print(result);
-
-			// Check that the result is indeed unmodifiable
-
-			try {
-				result.insert(new Object[] { "x", "y", "z" });
-				throw new AssertionError("Insert to Immutable Table test failed");
-			} catch (Exception e) {
-				/* it failed correctly */ }
-
-			try {
-				result.update(flintstoneSelector);
-				throw new AssertionError("Update of Immutable Table test failed");
-			} catch (Exception e) {
-				/* it failed correctly */ }
-
-			try {
-				result.delete(flintstoneSelector);
-				throw new AssertionError("Delete of Immutable Table test failed");
-			} catch (Exception e) {
-				/* it failed correctly */ }
-		}
-
 		public void testStore() throws IOException, ClassNotFoundException { // Flush the table to disk, then reread it.
 																				// Subsequent tests that use the
 																				// "people" table will
@@ -852,33 +608,34 @@ import com.holub.tools.ArrayIterator;
 			List tables = new ArrayList();
 			tables.add(address);
 
-			Table result = // WHERE people.addrID = address.addrID
-					people.select(new Selector.Adapter() {
-						public boolean approve(Cursor[] tables) {
-							return tables[0].column("addrId").equals(tables[1].column("addrId"));
-						}
-					}, columns, tables);
+			SelectAlgorithm selectAlgorithm = new DefaultSelect(people, tables, new Selector.Adapter() {
+				public boolean approve(Cursor[] tables) {
+					return tables[0].column("addrId").equals(tables[1].column("addrId"));
+				}
+			});
+			Table result = selectAlgorithm.doSelect(); // WHERE people.addrID = address.addrID
 
 			print(result);
 			System.out.println("");
 
 			// Now test a three-way join
 			//
-			System.out.println("\nSELECT first,last,street,city,state,zip,text" + " FROM people, address, third"
+			System.out.println("\nSELECT first,last, state, text" + " FROM people, address, third"
 					+ " WHERE (people.addrId = address.addrId)" + " AND (people.addrId = third.addrId)");
 
 			Table third = TableFactory.create("third", new String[] { "addrId", "text" });
 			third.insert(new Object[] { "1", "addrId=1" });
 			third.insert(new Object[] { "2", "addrId=2" });
-
-			result = people.select(new Selector.Adapter() {
-				public boolean approve(Cursor[] tables) {
-					return (tables[0].column("addrId").equals(tables[1].column("addrId"))
-							&& tables[0].column("addrId").equals(tables[2].column("addrId")));
-				}
-			},
-
-					new String[] { "last", "first", "state", "text" }, new Table[] { address, third });
+			
+			selectAlgorithm = new ColumnsSelect(
+				new DefaultSelect(people, new ArrayList() { { add(address); add(third); } } , 
+					new Selector.Adapter() {
+						public boolean approve(Cursor[] tables) {
+							return (tables[0].column("addrId").equals(tables[1].column("addrId"))
+									&& tables[0].column("addrId").equals(tables[2].column("addrId")));
+						}
+			}), new ArrayList() { { add("last"); add("first"); add("state"); add("text"); } });
+			result = selectAlgorithm.doSelect();
 
 			System.out.println(result.toString() + "\n");
 		}

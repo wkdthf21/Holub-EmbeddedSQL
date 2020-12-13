@@ -79,22 +79,7 @@ public class UnmodifiableTable implements Table
 	private final void illegal()
 	{	throw new UnsupportedOperationException();
 	}
-
-	public Table select(Selector w,String[] r,Table[] o)
-	{	return wrapped.select( w, r, o );
-	}
-	public Table select(Selector where, String[] requestedColumns)
-	{	return wrapped.select(where, requestedColumns );
-	}
-	public Table select(Selector where)
-	{	return wrapped.select(where);
-	}
-	public Table select(Selector w,Collection r,Collection o)
-	{	return wrapped.select( w, r, o );
-	}
-	public Table select(Selector w, Collection r)
-	{	return wrapped.select(w, r);
-	}
+	
 	public Cursor rows()
 	{	return wrapped.rows();
 	}
@@ -114,4 +99,6 @@ public class UnmodifiableTable implements Table
 	 *  that was passed to the constructor. Use the method with care.
 	 */
 	public Table extract(){ return wrapped;	}
+
+
 }
