@@ -179,7 +179,7 @@ statement       ::=
                 |   UPDATE  IDENTIFIER SET IDENTIFIER
                                             EQUAL expr WHERE expr
                 |   DELETE  FROM IDENTIFIER WHERE expr
-                |   SELECT  [INTO identifier] idList
+                |   SELECT  [DISTINCT] idList [INTO identifier]
                                         FROM idList [WHERE expr]
 idList          ::= IDENTIFIER idList' | STAR
 idList'         ::= COMMA IDENTIFIER idList'
@@ -683,7 +683,7 @@ public final class Database
      *      |   UPDATE  IDENTIFIER SET IDENTIFIER
      *                              EQUAL expr [WHERE expr]
      *      |   DELETE  FROM IDENTIFIER WHERE expr
-     *      |   SELECT  idList [INTO table] FROM idList [WHERE expr]
+     *      |   SELECT  [DISTINCT] idList [INTO table] FROM idList [WHERE expr]
      * </PRE>
 	 * <p>
 	 *
