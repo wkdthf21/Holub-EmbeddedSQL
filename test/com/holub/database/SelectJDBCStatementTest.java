@@ -14,23 +14,19 @@ import org.junit.jupiter.api.DisplayName;
 
 import com.holub.database.jdbc.JDBCStatement;
 
-/**
+/** <b> Move all files in Dbase folder to c:/dp2020 folder before testing </b> </br></br>
+ * 
+ * Test fixed Select Function of ConcreteTable to solve the problem </br>
+ * of not being able to "Select * From name, address WHERE name.addrId = address.addrId" </br></br>
+ * 
+ * Tests JDBCStatement works when click the Run button in the console </br>
+ * To Console Test, Create Database and JDBCStatement arbitrary objects </br>
+ * 
  * @author wkdthf21
- * 
- * Test fixed Select Function of ConcreteTable to solve the problem 
- * of not being able to "Select * From name, address WHERE name.addrId = address.addrId"
- * 
- * Tests JDBCStatement works when click the Run button in the console
- * To Console Test, Create Database and JDBCStatement arbitrary objects
- * 
- * [! Move all files in Dbase folder to c:/dp2020 folder before testing]
- * 
  * @see Console
  * @see JDBCStatement
  * @see Database
- * @see SelectTest
- * @see ConcreteTable - select(Selector where, String[] requestedColumns, Table[] otherTables) : Table\
- * @see Database - doSelect( List columns, String into, List requestedTableNames, final Expression where )
+ * @see SelectAlgorithm
  */
 public class SelectJDBCStatementTest {
 	
