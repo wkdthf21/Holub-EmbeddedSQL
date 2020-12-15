@@ -182,6 +182,10 @@ statement       ::=
                 |   DELETE  FROM IDENTIFIER WHERE expr
                 |   SELECT  [DISTINCT] idList [INTO identifier]
                                         FROM idList [WHERE expr]
+                                        [ORDER BY idSrtMthd]
+                                        
+idSrtMthd       ::= IDENTIFIER [ASC | DESC] 
+
 idList          ::= IDENTIFIER idList' | STAR
 idList'         ::= COMMA IDENTIFIER idList'
                 |   e
@@ -391,6 +395,9 @@ public final class Database
 		VALUES 		= tokens.create( "'VALUES"	),
 		WHERE		= tokens.create( "'WHERE"	),
 		DISTINCT    = tokens.create( "DISTINCT" ),
+		ORDERBY     = tokens.create("ORDER BY"),
+		ASC  	    = tokens.create("ASC"),
+		DESC        = tokens.create("DESC"),
 		
 		WORK		= tokens.create( "WORK|TRAN(SACTION)?"		),
 		ADDITIVE	= tokens.create( "\\+|-" 					),
@@ -686,6 +693,8 @@ public final class Database
      *                              EQUAL expr [WHERE expr]
      *      |   DELETE  FROM IDENTIFIER WHERE expr
      *      |   SELECT  [DISTINCT] idList [INTO table] FROM idList [WHERE expr]
+     *      							  [ORDER BY identifier [ASC | DESC] | idStrMthdList]
+     *      
      * </PRE>
 	 * <p>
 	 *
@@ -802,8 +811,12 @@ public final class Database
 			Expression where = (in.matchAdvance(WHERE) == null)
 								? null : expr();
 			
+			
+			String idOrderBy = null;;
+			if(in.matchAdvance( ORDERBY ) != null) idOrderBy = idSrtMthd();
+			
 			Table result = doSelect(isDistinct, columns, into,
-								requestedTableNames, where );
+								requestedTableNames, where, idOrderBy );
 
 			return result;
 		}
@@ -814,6 +827,26 @@ public final class Database
 
 		return null;
 	}
+	
+	
+	//----------------------------------------------------------------------
+	// idSrtMthd   ::= IDENTIFIER [ASC | DESC]
+	private String idSrtMthd() throws ParseFailure {
+		String idSrtMthd = "";
+		String id, srtMthd;
+		if((id = in.required(IDENTIFIER)) != null) {
+			if((srtMthd = in.matchAdvance(DESC)) != null) {
+				idSrtMthd = srtMthd + " " + id;	// columns dose not contain blank
+			}
+			else {
+				in.matchAdvance(ASC);
+				idSrtMthd = id;
+			}
+		}
+		return idSrtMthd;
+	}
+	
+
 	//----------------------------------------------------------------------
 	// idList			::= IDENTIFIER idList' | STAR
 	// idList'			::= COMMA IDENTIFIER idList'
@@ -1390,7 +1423,7 @@ public final class Database
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	// @author : wkdthf21
 	// Select with SelectAlgorithm subclasses
-	private Table doSelect( boolean isDistinct, List columns, String into, List requestedTableNames, final Expression where )
+	private Table doSelect( boolean isDistinct, List columns, String into, List requestedTableNames, final Expression where, String idOrderBy )
 			throws ParseFailure{
 		
 		Iterator tableNames = requestedTableNames.iterator();
@@ -1452,11 +1485,9 @@ public final class Database
 			
 			// If statement has ORDER BY
 			/* add later...	*/
-			
-			
-			// If statement has INTO
-			/* add later...	*/
-			
+			if(idOrderBy != null && !idOrderBy.isEmpty()) {
+				selectAlgorithm = new OrderBySelect(selectAlgorithm, idOrderBy);
+			}
 			
 			// do select
 			Table result = selectAlgorithm.doSelect();
