@@ -195,4 +195,40 @@ public class ColumnsSelectTest {
 		);
 	}
 	
+	@DisplayName("Columns Select Test : (must3 쿼리) 2개의 Table에서 Select All")
+	@Test
+	void select_all_from_two_table() {
+		// given
+		List columns = new ArrayList();
+		List tables = new ArrayList();
+		tables.add(address);
+		
+		// when
+		// Select * From address, name WHERE name.addrId = address.addrId
+		SelectAlgorithm selectAlgorithm = new ColumnsSelect(new DefaultSelect(name, tables, new Selector.Adapter() {
+			public boolean approve(Cursor[] tables) {
+				return tables[0].column("addrId").equals(tables[1].column("addrId"));
+			}
+		}), columns);
+		
+		Table result = selectAlgorithm.doSelect();
+		
+		// then
+		assertAll(	
+			() -> assertNotNull(result),
+			() -> {
+				Cursor cursor = result.rows();
+				StringBuilder sb = new StringBuilder();
+				while(cursor.advance()) {
+					Iterator iter = cursor.columns();
+					while(iter.hasNext()) sb.append(iter.next() + " ");
+					sb.append("\r\n");
+				}
+				assertEquals(sb.toString(), "99998 Holub Berkeley 12 A-Street 0 CA Allen \r\n" + 
+						"00000 Flintstone Bed 34 B-Street 1 AZ Wilma \r\n" + 
+						"00000 Flintstone Bed 34 B-Street 1 AZ Fred \r\n");
+			}
+		);
+	}
+	
 }
