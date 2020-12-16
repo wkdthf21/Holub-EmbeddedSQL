@@ -75,7 +75,53 @@ src/com/holub/database/jdbc/Console.java 실행
 
 <br>
 
+
 ### Environment
 ---
 - JDK 14.0.1
 - Junit5
+
+<br>
+
+### Architecture
+---
+
+#### Holub-SQL 전체 구조
+<p align="center"><img src="/assets/111_83bdcaio4.png" width="500" height="400"></p>
+<br>
+
+
+#### Data Storage Layer
+<p align="center"><img src="/assets/KakaoTalk_20201216_005510106.jpg" width="600" height="700"></p>
+<br>
+
+
+#### SQL Layer
+<p align="center"><img src="/assets/KakaoTalk_20201216_005551829.jpg" width="700" height="700"></p>
+
+<br>
+
+
+#### JDBC Layer
+<p align="center"><img src="/assets/KakaoTalk_20201216_005713600.jpg" width="700" height="500"></p>
+
+
+#### 확장한 부분
+
+- Exporter
+  - Builder 패턴과 Template Method 패턴 적용
+<p align="center"><img src="/assets/111_z4xl5yxrn.png" width="400" height="200"></p>
+
+- Importer
+  - Builder 패턴 적용
+<p align="center"><img src="/assets/111_jaj4nqqn5.png" width="500" height="180"></p>
+
+- Select * from Table List 오류 해결 및 distinct / order by 키워드 지원
+  - Decorator 패턴 적용
+<p align="center"><img src="/assets/111_9fwzpexpm.png" width="600" height="300"></p>
+
+- SQL Statement Keyword를 Console에 모두 출력하는 기능
+  - Visitor 패턴 적용
+<p align="center"><img src="/assets/111_xmvesneuk.png" width="620" height="280"></p>
+
+<br>
