@@ -2,7 +2,7 @@
 ---
 ### Intro
 ---
-Holub-SQL에 디자인 패턴을 적용하여 기능을 확장하는 프로젝트
+Holub-SQL에 디자인 패턴을 적용하여 기능을 확장하는 프로젝트 <br>
 Link : https://holub.com/software/holubSQL/index.html
 <br>
 
