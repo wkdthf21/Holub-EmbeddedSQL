@@ -33,14 +33,18 @@ SELECT  idList [INTO identifier] FROM idList [WHERE expr]
 ---
 
 - Database의 Table을 HTML 파일로 Export
-<center><img src="/assets/111_xagr5fn4g.png" width="300" height="180"></center>
+<center><img src="/assets/111_xagr5fn4g.png" width="350" height="200"></center>
+
 <br>
+
 - XML Export와 XML Import
 <center><img src="/assets/111_nrbovdy0x.png" width="300" height="300"></center>
+
 <br>
 
 - 기존 Holub-SQL에서 아래 쿼리문 실행 시 발생하는 오류 해결
-  ![111](/assets/111.png)
+  <img src="/assets/111.png" width="500" height="30">
+  
 <br>
 
 - Visitor 패턴을 이용한 기능 개발
