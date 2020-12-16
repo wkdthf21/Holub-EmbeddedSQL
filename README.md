@@ -1,4 +1,4 @@
-## Holub-SQL 확장 프로젝트
+## Holub-SQL 확장 프로젝트 :smile:
 ---
 ### Intro
 ---
