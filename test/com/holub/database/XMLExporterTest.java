@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import com.holub.tools.ArrayIterator;
 
 /**
- * @author yesol
  * 
  * Test exporting table to xml file
  * 
@@ -55,6 +54,7 @@ import com.holub.tools.ArrayIterator;
 	</table>
  *	</PRE>
  *
+ * @author wkdthf21
  * @see XMLExporter
  */
 @DisplayName("XML Exporter Test 클래스")

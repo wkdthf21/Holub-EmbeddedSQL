@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
 /**
- * @author yesol
  *
  * Test importing table from xml file
  * [! Move all files in Dbase folder to C:/dp2020 folder before testing]
@@ -45,7 +44,7 @@ import org.xml.sax.SAXException;
 	</data>
 	</table>
 	
- *
+ * @author wkdthf21
  */
 class XMLImporterTest {
 
