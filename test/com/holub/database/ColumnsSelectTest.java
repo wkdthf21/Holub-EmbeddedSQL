@@ -162,4 +162,37 @@ public class ColumnsSelectTest {
 		);
 	}
 	
+	@DisplayName("Columns Select Test : 1개의 Table에서 Select All")
+	@Test
+	void select_all_from_one_table() {
+		// given
+		List columns = new ArrayList();
+		List tables = new ArrayList();
+		
+		// when
+		// Select * From name WHERE name.addrID = 0
+		SelectAlgorithm selectAlgorithm = new ColumnsSelect(new DefaultSelect(name, tables, new Selector.Adapter() {
+			public boolean approve(Cursor[] tables) {
+				return tables[0].column("addrId").equals("0");
+			}
+		}), columns);
+		
+		Table result = selectAlgorithm.doSelect();
+		
+		// then
+		assertAll(	
+			() -> assertNotNull(result),
+			() -> {
+				Cursor cursor = result.rows();
+				StringBuilder sb = new StringBuilder();
+				while(cursor.advance()) {
+					Iterator iter = cursor.columns();
+					while(iter.hasNext()) sb.append(iter.next() + " ");
+					sb.append("\r\n");
+				}
+				assertEquals(sb.toString(), "Holub Allen 0 \r\n");
+			}
+		);
+	}
+	
 }

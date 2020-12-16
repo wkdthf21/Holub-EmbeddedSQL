@@ -45,7 +45,6 @@ public class ColumnsSelect extends DecoratorSelect {
 	private Table doSelect(String[] columnNames) {
 		
 		Table table = super.selectAlgorithm.doSelect();
-		Table resultTable = new ConcreteTable(null, columnNames);
 		
 		// If we need join & requested Columns is *
 		if(columnNames == null || columnNames.length == 0) {
@@ -54,6 +53,7 @@ public class ColumnsSelect extends DecoratorSelect {
 				columnNames[i] = table.rows().columnName(i);
 		}
 		
+		Table resultTable = new ConcreteTable(null, columnNames);
 		selectRequestedColumns(table, resultTable, columnNames);
 		
 		return resultTable;
