@@ -46,10 +46,9 @@ public class DefaultSelect extends SelectAlgorithm{
 	 * @return Table
 	 */
 	private Table select(Table[] otherTables) {
-		
-		// select from only source table
-		if(otherTables == null || otherTables.length == 0) return select();
-		
+	
+		if(!isTableExist(otherTables)) return select();	// select from only source table
+			
 		Table[] allTables = new Table[otherTables.length + 1];
 		allTables[0] = source;
 		System.arraycopy(otherTables, 0, allTables, 1, otherTables.length);
@@ -63,6 +62,15 @@ public class DefaultSelect extends SelectAlgorithm{
 		selectFromCartesianProduct(0, where, columnNames, allTables, envelope, resultTable);
 		
 		return resultTable;
+		
+	}
+	
+	/**
+	 * return true if tables exist
+	 * @return boolean
+	 */
+	private boolean isTableExist(Table[] tables) {
+		return tables != null && tables.length != 0;
 	}
 	
 	
